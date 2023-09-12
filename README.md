@@ -7,7 +7,7 @@
 
 　　以下是`微信公眾號俱舍論`的部分文章在`作業部落(zybuluo.com)`中的鏈接，這裏會對原文作**實時修訂**。
 
-## 　　[略析有部極微理論的基礎](https://github.com/arpcn/abhidharma/blob/main/md/略析有部極微理論的基礎.md)
+## 　　[略析有部極微理論的基礎](md/略析有部極微理論的基礎.md)
 
 ## 　　[與「三世有」相關的論義](https://www.zybuluo.com/arpcn/note/2535115)
 
