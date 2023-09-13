@@ -9,7 +9,7 @@
 
 　　文件以md及html兩種格式展示。
 
-　　html格式在此處：https://arpcn.github.io 。
+　　html格式在此處：https://arpcn.github.io 
 
 　　md格式如下：
 
