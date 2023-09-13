@@ -1,7 +1,7 @@
 ﻿# [歷史鏈接][1]
 
 标签： 俱舍論
-　　　　　　宗杰　2023年8月8日　[俱舍論](https://mp.weixin.qq.com/s/dtrnkAo_uzlrY_xa_xbdaQ)
+　　　　　　宗杰　2023年8月8日　[俱舍論](https://mp.weixin.qq.com/s/HNNfqC3dI2HMy4MXRWK-pw)
 
 ---
 
