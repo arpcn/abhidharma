@@ -5,7 +5,8 @@
 
 ---
 
-　　以下是`微信公眾號俱舍論`的部分文章在[`GitHub`](https://github.com/arpcn/abhidharma)中的鏈接，這裏會對原文作**實時修訂**。文件以md及html兩種格式展示。
+　　以下是`微信公眾號俱舍論`的部分文章在[`GitHub`](https://github.com/arpcn/abhidharma)中的鏈接，這裏會對原文作**實時修訂**。
+　　文件以md及html兩種格式展示。
 
 　　html格式在此處：https://arpcn.github.io 。
 
