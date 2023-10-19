@@ -9,7 +9,7 @@
 
 　　俱舍論及頌疏諸註對照等文檔<br>
 　　链接: <br>
-https://pan.baidu.com/s/1psgHRSs2-XJ4Qi4g3JOWfQ?pwd=1234 提取码: 1234
+https://pan.baidu.com/s/1vYu-pub7ZiGpDF_CGBx0nw?pwd=1234 提取码: 1234
 
 　　俱舍论颂疏160讲(mp3-mp4)<br>
 链接: <br>
