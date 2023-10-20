@@ -37,7 +37,7 @@ https://pan.baidu.com/s/1D95EUkuZPOZvwjiRUt6Fgg?pwd=8j60 提取码: 8j60
 
 另外，群文件中有相关梵藏文件供下载。
 
-[俱舍論學習羣68897856](https://mp.weixin.qq.com/s/wRe15zUi0lCR-F4HFGp0ew)
+[俱舍論學習羣(六足總綱)68897856](https://mp.weixin.qq.com/s/wRe15zUi0lCR-F4HFGp0ew)
 
 
 
