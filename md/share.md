@@ -1,4 +1,6 @@
-﻿# [Abhidharma 網盤分享][1]
+﻿[arpcn](https://arpcn.github.io/)><br>
+
+# [Abhidharma 網盤分享][1]
 
 标签： 俱舍論
 　　　　　　宗杰　2023年8月8日　[俱舍論](https://mp.weixin.qq.com/s/HNNfqC3dI2HMy4MXRWK-pw)
@@ -34,4 +36,7 @@ https://pan.baidu.com/s/1D95EUkuZPOZvwjiRUt6Fgg?pwd=8j60 提取码: 8j60
 若有失效链接，欢迎到qq群68897856中说明。
 
 另外，群文件中有相关梵藏文件供下载。
+
+![俱舍論學習羣](../pic/俱舍論學習羣.jpg)
+
 
