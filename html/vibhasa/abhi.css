@@ -1,0 +1,15 @@
+
+body {  
+    letter-spacing: .034em;
+    margin: 3%;  
+    background-color:#FFFFFF;
+  }  
+  p {  
+    padding-bottom: 10px;  
+    line-height: 1.6;  
+    margin:0px;
+  }  
+@media screen and (min-width:1025px){
+body{position:relative;}
+body{width:780px;margin-left:auto;margin-right:auto;}
+}
