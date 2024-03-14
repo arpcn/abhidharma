@@ -1,4 +1,4 @@
-﻿[arpcn](https://arpcn.github.io/)><br>
+﻿﻿[arpcn](https://arpcn.github.io/)><br>
 
 # [Abhidharma 網盤分享][1]
 
@@ -30,7 +30,7 @@ https://pan.baidu.com/s/1csB6Jb53V2tJXovVyCzsGQ?pwd=1234 提取码: 1234<br><br>
 https://pan.baidu.com/s/1a-_9AemcUjaaLUa54oH--w?pwd=1234 提取码: 1234<br><br>
 
 <details>
-<summary>　☞ <b>俱舍八品頌文講解</b> ☜ 點擊 ◂</summary>
+<summary>　☞ <b>俱舍八品頌文講解</b>(方便背頌文) ☜ 點擊 ◂</summary>
 界品頌<br>
 <pre>&emsp;&emsp;链接: <a href="https://pan.baidu.com/s/1O3hYrWNJZXNgA5t9QpK9lg?pwd=nyug">https://pan.baidu.com/s/1O3hYrWNJZXNgA5t9QpK9lg?pwd=nyug</a> 提取码: nyug</pre>
 <br  />&emsp;&emsp;
