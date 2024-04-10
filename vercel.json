@@ -3,12 +3,12 @@
 
   "rewrites": [
     {
-      "source": "/html/",
-      "destination": "https://publish.obsidian.md/serve?url=io.arpcn.top/html"
+      "source": "/abhidharma/",
+      "destination": "https://publish.obsidian.md/serve?url=io.arpcn.top/abhidharma"
     },
     {
-      "source": "/html/:path*",
-      "destination": "https://publish.obsidian.md/serve?url=io.arpcn.top/html/:path*"
+      "source": "/abhidharma/:path*",
+      "destination": "https://publish.obsidian.md/serve?url=io.arpcn.top/abhidharma/:path*"
     }
   ]
 }
