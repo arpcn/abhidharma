@@ -7,7 +7,7 @@
       "destination": "https://publish.obsidian.md/serve?url=io.arpcn.top/html"
     },
     {
-      "source": "/my-notes/:path*",
+      "source": "/html/:path*",
       "destination": "https://publish.obsidian.md/serve?url=io.arpcn.top/html/:path*"
     }
   ]
