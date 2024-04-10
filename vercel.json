@@ -1,0 +1,15 @@
+
+{
+
+  "rewrites": [
+    {
+      "source": "/html/",
+      "destination": "https://publish.obsidian.md/serve?url=io.arpcn.top/html"
+    },
+    {
+      "source": "/my-notes/:path*",
+      "destination": "https://publish.obsidian.md/serve?url=io.arpcn.top/html/:path*"
+    }
+  ]
+}
+
