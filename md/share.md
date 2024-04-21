@@ -11,7 +11,8 @@
 
 　　俱舍論及頌疏諸註對照等文檔<br>
 　　链接: <br>
-https://pan.baidu.com/s/1vYu-pub7ZiGpDF_CGBx0nw?pwd=1234 提取码: 1234<br><br>
+https://pan.baidu.com/s/1vYu-pub7ZiGpDF_CGBx0nw?pwd=1234 提取码: 1234<br>
+　　(2024年4月起，文件整理轉用md格式，後續逐步放入此綱頁：[arpcn.top](https://arpcn.top))<br><br>
 
 　　俱舍论颂疏160讲(mp3-mp4)<br>
 链接: <br>
