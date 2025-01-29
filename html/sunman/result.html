@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+<link rel='stylesheet' type='text/css' href='suman.css' />
+<meta charset="UTF-8">
+    <title>Result Output</title>
+</head>
+<style>
+        body {
+            margin: 0; /* 移除默认边距 */
+            padding: 0;
+        }
+@font-face {
+    font-family: 'ziti1';
+    src: url('SunmanPUA.ttf') format('truetype');
+}
+@font-face {
+    font-family: 'ziti2';
+    src: url('TH-Tshyn-P0.ttf') format('truetype');
+}
+@font-face {
+    font-family: 'ziti3';
+    src: url('TH-Tshyn-P1.ttf') format('truetype');
+}
+@font-face {
+    font-family: 'ziti4';
+    src: url('TH-Tshyn-P2.ttf') format('truetype');
+}
+@font-face {
+    font-family: 'ziti5';
+    src: url('TH-Tshyn-P16.ttf') format('truetype');
+}
+
+body {font-family: Tahoma, Arial, Helvetica, sans-serif, SunmanPUA, TH-Tshyn-P0, TH-Tshyn-P1, TH-Tshyn-P2; }
+        /* 字体加载后的样式 */
+html.fonts-loaded { Tahoma, Arial, Helvetica, sans-serif, ziti1, ziti2, ziti3, ziti4, ziti5, SunmanPUA, TH-Tshyn-P0, TH-Tshyn-P1, TH-Tshyn-P2; }
+
+a{background-color: #ffffff}
+a{text-decoration:none}
+a:link{color:#1257F9}
+a:visited{color:#1257F9}
+a:hover{color:#FF00FF}
+button:hover{color:#FF00FF}
+.Line {font-family:ziti1, ziti2, ziti3, ziti4, ziti5, SunmanPUA,TH-Tshyn-P0,TH-Tshyn-P1,TH-Tshyn-P2,Calibri,FMing-m,FMing-1,FMing-2,FMing-3,FMing-F,FMing-X,FSung-m,FSung-1,FSung-2,FSung-3,FSung-F,FSung-X,MingLiU,MingLiU-ExtB;display:block;}
+.Options {margin-left:4em;text-indent:-3em;}
+.Title {font-family:DFKai-SB;font-size:1.5em;color:#0000FF;}
+.Total {color:#FF0080;}
+.LabelB {color:#000088;}
+.LabelR {color:#600060;}
+.LabelL {color:#0000FF;}
+.Editor {font-size:1.2em;font-family:ziti1, ziti2, ziti3, ziti4, ziti5, SunmanPUA,TH-Tshyn-P0,TH-Tshyn-P1,TH-Tshyn-P2,FMing-m,FMing-1,FMing-2,FMing-3,FMing-F,FMing-X,FSung-m,FSung-1,FSung-2,FSung-3,FSung-F,FSung-X,MingLiU,MingLiU-ExtB;}
+.Button {width:2em;height:2em;border:1px solid #707070;padding:3px 2px 1px 2px;border-radius:5px;background-color:#E0E0E0;margin-left:0;text-indent:0;cursor:pointer;font-family:Arial;}
+.FnKey {font-size:1.2em;width:1.4em;height:1.4em;border:1px solid #FF7070;padding:2px 2px 1px 2px;border-radius:5px;color:#0000FF;background-color:#FFE0E0;margin-left:0;margin-right:1px;text-indent:0;cursor:pointer;font-family:ziti1, ziti2, ziti3, ziti4, ziti5, FMing-m,FMing-1,FMing-2,FMing-3,FMing-F,FMing-X,FSung-m,FSung-1,FSung-2,FSung-3,FSung-F,FSung-X,MingLiU,MingLiU-ExtB;}
+.Counter {color:#696969;}
+.Keypad {line-height:100%;width:100%}
+.Cathdr {font-size:0.8em;color:#404040;background-color:#C0C0C0;text-align:left;line-height:100%;}
+.Catbdy {background-color:#E0E0E0;vertical-align:top;white-space:nowrap;}
+.Key {width:17pt;height:17pt;font-size:12pt;color:#0000FF;background-color:#E0E0E0;border-left:1px solid #FFFFFF;border-top:1px solid #FFFFFF;border-right:1px solid #808080;border-bottom:1px solid #808080;padding:1px 2px 1px 1px;margin:0;cursor:pointer;font-family:ziti1, ziti2, ziti3, ziti4, ziti5, FMing-m,FMing-1,FMing-2,FMing-3,FMing-F,FMing-X,FSung-m,FSung-1,FSung-2,FSung-3,FSung-F,FSung-X,MingLiU,MingLiU-ExtB;}
+.Legend {line-height:180%;}
+.Color {height:1.5em;border:1px solid #C0C0C0;padding:0px 2px 1px 2px;margin-left:0;text-indent:0;cursor:pointer;font-family:Calibri;}
+.BMP {background-color:#E0E0E0;}
+.ExA {background:#C0E8FF;}
+.ExB {background:#FFF8D0;}
+.ExC {background:#D1BADA;}
+.ExD {background:#80FFB0;}
+.ExE {background:#FFC0D0;}
+.ExF {background:#90E0D0;}
+.ExG {background:#CBD0FF;}
+.CMP {background:#FFFFFF;}
+.SUP {background:#FCC800;}
+.OTH {background:#808080;}
+.Decmp {color:#0045FF!important;}
+.Fuzzy {color:#404040!important;}
+.Exact {color:#FF4500!important;}
+.Output {font-size:1.5em;line-height:150%;}
+.Block {border:0px solid #C0C0C0;padding:2px 0px 2px 1px;}
+.Out {font-size:0.8em;}
+
+/*设备显示 */
+@media screen and (min-width:880px){.rich_media{position:relative;}.rich_media {width:880px;margin-left:auto;margin-right:auto;}}
+@media only screen and (max-width: 879px) { 
+    .zoom {
+        /* 以左边顶点为变换原点 */
+        transform-origin: left top;
+        /* 放大1.5倍 */
+        transform: scale(1.2);
+        /* 限制最大宽度为手机屏幕宽度 */
+        max-width: 100vw;
+        word-wrap: break-word;
+        white-space: normal;    }
+}
+
+     .image-cnt {
+            display: flex;
+            flex-wrap: nowrap;
+            justify-content: flex-start;
+        }
+
+     .img {
+            width: 56px;
+            height: 56px;
+        }
+
+        /* 媒体查询，当窗口宽度小于某个值时，调整图片宽度 */
+        @media (max-width: 550px) {
+         .img {
+                width: calc((100% - 36px) / 8);
+                /* 假设图片之间有10px的间隙，5个间隙共5 * 10px */
+                height: calc((100% - 36px) / 8);
+            }
+        }
+
+</style>
+
+<body>
+    <span class="Line Output" id="result"><br></span>
+    
+    <script src="decompose-part0.js"></script>
+    <script>
+        // 原始数据（以数组形式手动模拟重复键的数据）
+        
+        // 重组数据，处理重复键
+        var data = {};
+        rawEntries.forEach(entry => {
+            if (!data[entry.key]) {
+                data[entry.key] = []; // 如果键不存在，就初始化为空数组
+            }
+            data[entry.key].push(entry.value); // 将值加入对应的数组
+        });
+
+        // 查询函数
+        function findCharacter(inputCode) {
+            const resultDiv = document.getElementById("result");
+            resultDiv.innerHTML = ''; // 清空结果区域
+
+            if (inputCode.length === 0) {
+                resultDiv.innerHTML = '無編碼';
+                return;
+            }
+
+            const results = [];
+            if (inputCode.length === 1 || inputCode.length === 2) {
+                // 输入1或2个字符时，匹配全码
+                if (data[inputCode]) {
+                    results.push(...data[inputCode]);
+                }
+            } else {
+                // 输入3个或更多字符时，匹配以输入字符串开头的所有编码
+                for (const key in data) {
+                    if (key.startsWith(inputCode)) {
+                        results.push(...data[key]);
+                    }
+                }
+            }
+
+            if (results.length > 0) {
+                resultDiv.innerHTML = [...new Set(results)].join("，"); // 去重后显示
+            } else {
+                resultDiv.innerHTML = '無對應的漢字';
+            }
+        }
+
+        // 接收来自主文档的消息
+        window.addEventListener('message', function(event) {
+            const inputCode = event.data; // 获取输入的编码
+            findCharacter(inputCode); // 调用查询函数
+        });
+        
+        // 函数用于计算并发送高度
+        function sendHeight() {
+            const height = document.body.scrollHeight; // 获取内容的高度
+            window.parent.postMessage(height, '*'); // 发送给父文档
+        }
+
+        // 在内容加载完成后发送高度
+        window.onload = sendHeight;
+        // 如果内容动态变化，也可以在内容变化后调用 sendHeight
+    </script>
+
+</body>
+</html>
