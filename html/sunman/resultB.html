@@ -1,18 +1,9 @@
 <!DOCTYPE html>
-<html>
+<html lang="zh">
 <head>
-    <title>输出结果</title>
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-    <style>
-        /* 这里可以添加必要的样式 */
-        body {
-            margin: 0;
-            padding: 0;
-        }
-    </style>
+<meta charset="UTF-8">
+    <title>Result Output</title>
 </head>
-
-
 <style>
         body {
             margin: 0; /* 移除默认边距 */
@@ -80,7 +71,7 @@ button:hover{color:#FF00FF}
 .Decmp {color:#0045FF!important;}
 .Fuzzy {color:#404040!important;}
 .Exact {color:#FF4500!important;}
-.Output {font-size:1.5em;color:#9a661f!important;line-height:150%;}
+.Output {font-size:1.5em;line-height:150%;}
 .Block {border:0px solid #C0C0C0;padding:2px 0px 2px 1px;}
 .Out {font-size:0.8em;}
 
@@ -134,8 +125,7 @@ button:hover{color:#FF00FF}
 
 <body>
 <span id="loadingf" style="font-size:0.65em;font-weight:lighter;">字體加載中...</span>
-<span class="Line Output" id="output"><span id="loading" style="font-size:0.65em;font-weight:lighter;">「2．山人拆分檢索」數據加載中，請稍候...</span><br><br><br></span>
-
+<span class="Line Output" id="resultB"><span id="loading" style="font-size:0.65em;font-weight:lighter;">「3．山人全息碼查字」數據加載中，請稍候...</span><br></span>
 
 <script>
     function loadScript(src) {
@@ -150,14 +140,7 @@ button:hover{color:#FF00FF}
 
     async function loadScripts() {
         const scriptFiles = [
-            'decompose-part1.js',
-            'decompose-part2.js',
-            'decompose-part3.js',
-            'decompose-part4.js',
-            'decompose-part5.js',
-            'decompose-part6.js',
-            'decompose-part7.js',
-            'decompose-part8.js'
+            'decompose-part9.js',
         ];
 
         // 显示加载提示
@@ -166,9 +149,6 @@ button:hover{color:#FF00FF}
         // 等待所有脚本加载完成
         try {
             await Promise.all(scriptFiles.map(file => loadScript(file)));
-            // 所有脚本加载完成后合并数据
-            var dt = dt1.concat(dt2, dt3, dt4, dt5, dt6, dt7, dt8);
-         //    console.log('合并后的数据:', dt);
         } catch (error) {
             console.error(error);
         } finally {
@@ -182,45 +162,58 @@ button:hover{color:#FF00FF}
     loadScripts();
 </script>
 
-    <script src="decompose-part1.js"></script>
-    <script src="decompose-part2.js"></script>
-    <script src="decompose-part3.js"></script>
-    <script src="decompose-part4.js"></script>
-    <script src="decompose-part5.js"></script>
-    <script src="decompose-part6.js"></script>
-    <script src="decompose-part7.js"></script>
-    <script src="decompose-part8.js"></script>
-
-<script>
-
- var dt = dt1.concat(dt2, dt3, dt4, dt5, dt6, dt7, dt8);
-
-    function searchCharacter(input) {
-        var output = document.getElementById('output'); // 获取输出区域
-        output.innerHTML = ''; // 清空输出区域
-        if (input) {
-            var results = dt.filter(entry => entry.startsWith(input)); // 根据输入内容过滤结果
-            if (results.length > 0) {
-                // 去掉第一个半角冒号前的部分
-                var filteredResults = results.map(entry => {
-                    let index = entry.indexOf(':'); // 找到第一个冒号的位置
-                    return index !== -1 ? entry.substring(index + 1) : ''; // 返回冒号后的部分
-                }).join('<br>'); // 将结果连接为字符串
-                output.innerHTML = filteredResults; // 将结果显示在输出区域
-            } else {
-                output.innerHTML = '<span style="color:gray;font-size:0.75em;font-weight:lighter;">未找到相關結果，請輸入單個漢字</span>'; // 找不到结果时的提示
+    <script src="decompose-part9.js"></script>
+    <script>
+        // 原始数据（以数组形式手动模拟重复键的数据）
+        
+        // 重组数据，处理重复键
+        var data = {};
+        rawEntries.forEach(entry => {
+            if (!data[entry.key]) {
+                data[entry.key] = []; // 如果键不存在，就初始化为空数组
             }
-        }
-    }
-
-
-       window.addEventListener('message', function(event) {
-            const input = event.data; // 获取从父文档传来的输入
-          //   console.log('Received message:', event.data);
-            searchCharacter(input); // 调用查询函数
+            data[entry.key].push(entry.value); // 将值加入对应的数组
         });
 
-/*        // 函数用于计算并发送高度
+        // 查询函数
+        function findCharacterB(inputCodeB) {
+            const resultDiv = document.getElementById("resultB");
+            resultDiv.innerHTML = ''; // 清空结果区域
+
+            if (inputCodeB.length === 0) {
+                resultDiv.innerHTML = '<span style="color:gray;font-size:0.65em;font-weight:lighter;">無編碼</span>';
+                return;
+            }
+
+            const results = [];
+            if (inputCodeB.length === 1 || inputCodeB.length === 2) {
+                // 输入1或2个字符时，匹配全码
+                if (data[inputCodeB]) {
+                    results.push(...data[inputCodeB]);
+                }
+            } else {
+                // 输入3个或更多字符时，匹配以输入字符串开头的所有编码
+                for (const key in data) {
+                    if (key.startsWith(inputCodeB)) {
+                        results.push(...data[key]);
+                    }
+                }
+            }
+
+            if (results.length > 0) {
+                resultDiv.innerHTML = [...new Set(results)].join("，"); // 去重后显示
+            } else {
+                resultDiv.innerHTML = '<span style="color:gray;font-size:0.65em;font-weight:lighter;">無對應的漢字</span>';
+            }
+        }
+
+        // 接收来自主文档的消息
+        window.addEventListener('message', function(event) {
+            const inputCodeB = event.data; // 获取输入的编码
+            findCharacterB(inputCodeB); // 调用查询函数
+        });
+        
+ /*       // 函数用于计算并发送高度
         function sendHeight() {
             const height = document.body.scrollHeight; // 获取内容的高度
             window.parent.postMessage(height, '*'); // 发送给父文档
@@ -228,12 +221,8 @@ button:hover{color:#FF00FF}
 
         // 在内容加载完成后发送高度
         window.onload = sendHeight;
-        // 如果内容动态变化，也可以在内容变化后调用 sendHeight
-*/
-
-
-
-</script>
+        // 如果内容动态变化，也可以在内容变化后调用 sendHeight  */
+    </script>
 
 
 <!-- 字體1 -->
@@ -262,7 +251,7 @@ button:hover{color:#FF00FF}
             // 为 HTML 添加一个 class，表示字体已加载
             document.documentElement.classList.add('fonts-loaded');
         }).catch(function (err) {
-       //      console.error('字体加载失败:', err);
+      //       console.error('字体加载失败:', err);
         }).finally(function () {
             // 隐藏加载提示
             loadingfDiv.style.display = 'none';
