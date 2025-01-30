@@ -119,12 +119,10 @@ button:hover{color:#FF00FF}
         }
         #loading {
             display: none; /* 默认隐藏 */
-            font-size: 20px;
             color: #007BFF;
         }
         #loadingf {
             display: none; /* 默认隐藏 */
-            font-size: 20px;
             color: #007BFF;
         }
         .fonts-loaded #loadingf {
@@ -136,8 +134,8 @@ button:hover{color:#FF00FF}
 
 <body>
 
-    <span class="Line Output" id="output"><br><span id="loading">「2．山人拆分檢索」數據加載中，請稍候...</span><br><br></span>
-<div class="fonts-loaded" id="loading">字體加載中...</div>
+    <span class="Line Output" id="output"><br><span id="loading" style="font-size:0.65em;font-weight:lighter;">「2．山人拆分檢索」數據加載中，請稍候...</span><br><br></span>
+<div id="loadingf" style="font-size:0.65em;font-weight:lighter;">字體加載中...</div>
 
 <script>
     function loadScript(src) {
