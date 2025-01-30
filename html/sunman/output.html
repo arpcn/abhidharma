@@ -80,7 +80,7 @@ button:hover{color:#FF00FF}
 .Decmp {color:#0045FF!important;}
 .Fuzzy {color:#404040!important;}
 .Exact {color:#FF4500!important;}
-.Output {font-size:1.5em;line-height:150%;}
+.Output {font-size:1.5em;color:#9a661f!important;line-height:150%;}
 .Block {border:0px solid #C0C0C0;padding:2px 0px 2px 1px;}
 .Out {font-size:0.8em;}
 
@@ -123,7 +123,6 @@ button:hover{color:#FF00FF}
 
 <body>
     <span class="Line Output" id="output"><br><br><br></span>
-
     <script src="decompose-part1.js"></script>
     <script src="decompose-part2.js"></script>
     <script src="decompose-part3.js"></script>
@@ -135,7 +134,7 @@ button:hover{color:#FF00FF}
 
 <script>
 
-var dt = dt1.concat(dt2, dt3, dt4, dt5, dt6, dt7, dt8);
+ var dt = dt1.concat(dt2, dt3, dt4, dt5, dt6, dt7, dt8);
 
     function searchCharacter(input) {
         var output = document.getElementById('output'); // 获取输出区域
@@ -158,6 +157,7 @@ var dt = dt1.concat(dt2, dt3, dt4, dt5, dt6, dt7, dt8);
 
        window.addEventListener('message', function(event) {
             const input = event.data; // 获取从父文档传来的输入
+            console.log('Received message:', event.data);
             searchCharacter(input); // 调用查询函数
         });
 
