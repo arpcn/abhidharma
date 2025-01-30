@@ -122,7 +122,12 @@ button:hover{color:#FF00FF}
             font-size: 20px;
             color: #007BFF;
         }
-        .fonts-loaded #loading {
+        #loadingf {
+            display: none; /* 默认隐藏 */
+            font-size: 20px;
+            color: #007BFF;
+        }
+        .fonts-loaded #loadingf {
             display: none; /* 字体加载完成后隐藏提示 */
         }
 
@@ -132,6 +137,7 @@ button:hover{color:#FF00FF}
 <body>
 
     <span class="Line Output" id="output"><br><span id="loading">「2．山人拆分檢索」數據加載中，請稍候...</span><br><br></span>
+<div class="fonts-loaded" id="loading">字體加載中...</div>
 
 <script>
     function loadScript(src) {
@@ -170,7 +176,7 @@ button:hover{color:#FF00FF}
         } finally {
             // 隐藏加载提示并显示内容
             document.getElementById('loading').style.display = 'none';
-            document.getElementById('content').style.display = 'block';
+           //   document.getElementById('content').style.display = 'block';
         }
     }
 
@@ -232,8 +238,8 @@ button:hover{color:#FF00FF}
         const font5 = new FontFaceObserver('ziti5');
 
         // 显示加载提示
-        const loadingDiv = document.getElementById('loading');
-        loadingDiv.style.display = 'block';
+        const loadingfDiv = document.getElementById('loadingf');
+        loadingfDiv.style.display = 'block';
 
         // 使用 Promise.all 并行加载所有字体
         Promise.all([
@@ -243,14 +249,13 @@ button:hover{color:#FF00FF}
             font4.load(),
             font5.load()
         ]).then(function () {
-            console.log('所有字体加载完成');
             // 为 HTML 添加一个 class，表示字体已加载
             document.documentElement.classList.add('fonts-loaded');
         }).catch(function (err) {
             console.error('字体加载失败:', err);
         }).finally(function () {
             // 隐藏加载提示
-            loadingDiv.style.display = 'none';
+            loadingfDiv.style.display = 'none';
         });
     }
 
