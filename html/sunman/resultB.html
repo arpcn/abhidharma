@@ -25,7 +25,6 @@
 body {font-family: Tahoma, Arial, Helvetica, sans-serif, SunmanPUA, TH-Tshyn-P0, TH-Tshyn-P1, TH-Tshyn-P2; }
         /* 字体加载后的样式 */
 html.fonts-loaded {font-family: Tahoma, Arial, Helvetica, sans-serif, SunmanPUA,TH-Tshyn-P0,TH-Tshyn-P1,TH-Tshyn-P2,ziti1, ziti2, ziti3, ziti4; }
-.fnt {font-family: SunmanPUA,TH-Tshyn-P0,TH-Tshyn-P1,TH-Tshyn-P2,ziti1, ziti2, ziti3, ziti4,Calibri,Tahoma, Arial, Helvetica, sans-serif, FMing-m,FMing-1,FMing-2,FMing-3,FMing-F,FMing-X,FSung-m,FSung-1,FSung-2,FSung-3,FSung-F,FSung-X,MingLiU,MingLiU-ExtB; }
 
 /*        body {
             margin: 0; /* 移除默认边距 
@@ -37,14 +36,14 @@ a:link{color:#1257F9}
 a:visited{color:#1257F9}
 a:hover{color:#FF00FF}
 button:hover{color:#FF00FF}
-.Line {display:block;}
-.Title {font-size:1.5em;color:#0000FF;font-weight:bolder;}
-.Editor {font-size:1.2em;}
-.Options {margin-left:4em;text-indent:-3em;}
-.LabelB {color:#000088;}
-.Button {width:2em;height:2em;border:1px solid #707070;padding:3px 2px 1px 2px;border-radius:5px;background-color:#E0E0E0;margin-left:0;text-indent:0;cursor:pointer;font-family:Arial;}
+.Line {display:block;font-family: SunmanPUA,TH-Tshyn-P0,TH-Tshyn-P1,TH-Tshyn-P2,ziti1, ziti2, ziti3, ziti4,Calibri,Tahoma, Arial, Helvetica, sans-serif, FMing-m,FMing-1,FMing-2,FMing-3,FMing-F,FMing-X,FSung-m,FSung-1,FSung-2,FSung-3,FSung-F,FSung-X,MingLiU,MingLiU-ExtB;}
+.Title {font-size:1.5em;color:#0000FF;font-weight:bolder;font-family: SunmanPUA,TH-Tshyn-P0,TH-Tshyn-P1,TH-Tshyn-P2,ziti1, ziti2, ziti3, ziti4,Calibri,Tahoma, Arial, Helvetica, sans-serif, FMing-m,FMing-1,FMing-2,FMing-3,FMing-F,FMing-X,FSung-m,FSung-1,FSung-2,FSung-3,FSung-F,FSung-X,MingLiU,MingLiU-ExtB;}
+.Editor {font-size:1.2em;font-family: SunmanPUA,TH-Tshyn-P0,TH-Tshyn-P1,TH-Tshyn-P2,ziti1, ziti2, ziti3, ziti4,Calibri,Tahoma, Arial, Helvetica, sans-serif, FMing-m,FMing-1,FMing-2,FMing-3,FMing-F,FMing-X,FSung-m,FSung-1,FSung-2,FSung-3,FSung-F,FSung-X,MingLiU,MingLiU-ExtB;}
 .Output {font-size:1.5em;color:#9c5f21;line-height:150%;}
 .Out {font-size:0.8em;}
+.Options {margin-left:4em;text-indent:-3em;}
+.Button {width:2em;height:2em;border:1px solid #707070;padding:3px 2px 1px 2px;border-radius:5px;background-color:#E0E0E0;margin-left:0;text-indent:0;cursor:pointer;font-family:Arial;}
+.LabelB {color:#000088;}
 
 /*设备显示 */
 @media screen and (min-width:880px){.rich_media{position:relative;}.rich_media {width:880px;margin-left:auto;margin-right:auto;}}
@@ -98,9 +97,9 @@ input::-moz-placeholder {color: #f8e0cd;font-size:14px;}
 </head>
 
 <body>
-<span id="loading" class="Line Out fnt"><br>「3．山人全息碼查字」數據加載中，請稍候...</span>
-<span id="loadingf" class="Line Out fnt"><br>「3．山人全息碼查字」字體加載中...</span>
-<span class="Line Output fnt" id="resultB"><br></span>
+<span id="loading" class="Line Out"><br>「3．山人全息碼查字」數據加載中，請稍候...</span>
+<span id="loadingf" class="Line Out"><br>「3．山人全息碼查字」字體加載中...</span>
+<span class="Line Output" id="resultB"><br></span>
 
 <script>
     function loadScript(src) {
