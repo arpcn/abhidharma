@@ -4,6 +4,29 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <base target="_blank" />
 <link rel="stylesheet" href="js/sunman.css">
+<style>
+@font-face {
+    font-family: 'ziti1';
+    src: url('../ttf/SunmanPUA.ttf') format('truetype');
+}
+@font-face {
+    font-family: 'ziti2';
+    src: url('../ttf/TH-Tshyn-P0.ttf') format('truetype');
+}
+@font-face {
+    font-family: 'ziti3';
+    src: url('../ttf/TH-Tshyn-P1.ttf') format('truetype');
+}
+@font-face {
+    font-family: 'ziti4';
+    src: url('../ttf/TH-Tshyn-P2.ttf') format('truetype');
+}
+ /*  https://cdn\.jsdelivr\.net/gh/arpcn/abhidharma@main/html/sunman/  */
+
+body {font-family: Tahoma, Arial, Helvetica, sans-serif, SunmanPUA, TH-Tshyn-P0, TH-Tshyn-P1, TH-Tshyn-P2; }
+        /* 字体加载后的样式 */
+html.fonts-loaded { Tahoma, Arial, Helvetica, sans-serif, SunmanPUA,TH-Tshyn-P0,TH-Tshyn-P1,TH-Tshyn-P2,ziti1, ziti2, ziti3, ziti4; }
+</style>
 </head>
 
 <body bgcolor="#ffffff">
@@ -17,8 +40,8 @@
 <hr color=#e7e7e7>
 <span class="Line Options"><span class="LabelB">編碼</span>：<input class="Editor" type="text" id="inputCode" oninput="findCharacter(this.value)" style="width: 150px;" placeholder="請輸入編碼"></input><button class="Button" onclick="clearInputCode()">X</button> <span style="color:gray;font-size:0.65em; text-align:right;display:inline-block;width:calc(280px);">輸入法安裝與使用：1.<a href="https://github.com/arpcn/rime-shanren3/wiki/RimeSetup">Rime小狼毫</a> 2.<a href="https://github.com/arpcn/rime-shanren3/blob/master/rimesetup/山人輸入法強化訓練.rar">山人輸入法學習</a></span></span>
 <span class="Line Options"><span class="LabelB">漢字：</span>
-<span id="loadingf" class="Out Options" style="display:inline-block;">「1．山人單字查詢」字體加載中...</span>
-<span id="loading" class="Out Options" style="display:inline-block;">「1．山人單字查詢」數據加載中，請稍候...</span>
+<span id="loadingf" class="Out Options" style="display:inline-block;">字體加載中...</span>
+<span id="loading" class="Out Options" style="display:inline-block;">數據加載中，請稍候...</span>
 <span class="Output" id="result"></span></span>
 </details>
 
