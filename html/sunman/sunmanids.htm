@@ -22,9 +22,10 @@
 }
  /*  https://cdn\.jsdelivr\.net/gh/arpcn/abhidharma@main/html/sunman/  */
 
-body {font-family: SunmanPUA,TH-Tshyn-P0,TH-Tshyn-P1,TH-Tshyn-P2,Calibri,Tahoma, Arial, Helvetica, sans-serif, FMing-m,FMing-1,FMing-2,FMing-3,FMing-F,FMing-X,FSung-m,FSung-1,FSung-2,FSung-3,FSung-F,FSung-X,MingLiU,MingLiU-ExtB;}
+body {font-family: Tahoma, Arial, Helvetica, sans-serif, SunmanPUA, TH-Tshyn-P0, TH-Tshyn-P1, TH-Tshyn-P2; }
         /* 字体加载后的样式 */
-html.fonts-loaded {font-family: SunmanPUA,TH-Tshyn-P0,TH-Tshyn-P1,TH-Tshyn-P2,ziti1, ziti2, ziti3, ziti4,Calibri,Tahoma, Arial, Helvetica, sans-serif, FMing-m,FMing-1,FMing-2,FMing-3,FMing-F,FMing-X,FSung-m,FSung-1,FSung-2,FSung-3,FSung-F,FSung-X,MingLiU,MingLiU-ExtB; }
+html.fonts-loaded {font-family: Tahoma, Arial, Helvetica, sans-serif, SunmanPUA,TH-Tshyn-P0,TH-Tshyn-P1,TH-Tshyn-P2,ziti1, ziti2, ziti3, ziti4; }
+.fnt {font-family: SunmanPUA,TH-Tshyn-P0,TH-Tshyn-P1,TH-Tshyn-P2,ziti1, ziti2, ziti3, ziti4,Calibri,Tahoma, Arial, Helvetica, sans-serif, FMing-m,FMing-1,FMing-2,FMing-3,FMing-F,FMing-X,FSung-m,FSung-1,FSung-2,FSung-3,FSung-F,FSung-X,MingLiU,MingLiU-ExtB; }
 
 /*        body {
             margin: 0; /* 移除默认边距 
@@ -103,10 +104,10 @@ input::-moz-placeholder {color: #f8e0cd;font-size:14px;}
 
 <hr size=3 color=#c9c9c9>
 <details open>
-<summary><span class="Title">1．山人單字查詢</span><span style="color:gray;font-size:0.65em;text-align:right;display:inline-block;width:calc(120px);"><b><i>點擊縮展</i></b> ☜</span></summary>
+<summary><span class="Title fnt">1．山人單字查詢</span><span style="color:gray;font-size:0.65em;text-align:right;display:inline-block;width:calc(120px);"><b><i>點擊縮展</i></b> ☜</span></summary>
 <hr color=#e7e7e7>
-<span class="Line Options"><span class="LabelB">編碼</span>：<input class="Editor" type="text" id="inputCode" oninput="findCharacter(this.value)" style="width: 150px;" placeholder="請輸入編碼"></input><button class="Button" onclick="clearInputCode()">X</button> <span style="color:gray;font-size:0.65em; text-align:right;display:inline-block;width:calc(280px);">輸入法安裝與使用：1.<a href="https://github.com/arpcn/rime-shanren3/wiki/RimeSetup">Rime小狼毫</a> 2.<a href="https://github.com/arpcn/rime-shanren3/blob/master/rimesetup/山人輸入法強化訓練.rar">山人輸入法學習</a></span></span>
-<span class="Line Options"><span class="LabelB">漢字：</span>
+<span class="Line Options fnt"><span class="LabelB">編碼</span>：<input class="Editor fnt" type="text" id="inputCode" oninput="findCharacter(this.value)" style="width: 150px;" placeholder="請輸入編碼"></input><button class="Button" onclick="clearInputCode()">X</button> <span style="color:gray;font-size:0.65em; text-align:right;display:inline-block;width:calc(280px);">輸入法安裝與使用：1.<a href="https://github.com/arpcn/rime-shanren3/wiki/RimeSetup">Rime小狼毫</a> 2.<a href="https://github.com/arpcn/rime-shanren3/blob/master/rimesetup/山人輸入法強化訓練.rar">山人輸入法學習</a></span></span>
+<span class="Line Options fnt"><span class="LabelB">漢字：</span>
 <span id="loadingf" class="Out Options" style="display:inline-block;">字體加載中...</span>
 <span id="loading" class="Out Options" style="display:inline-block;">數據加載中，請稍候...</span>
 <span class="Output" id="result"></span></span>
@@ -136,9 +137,9 @@ input::-moz-placeholder {color: #f8e0cd;font-size:14px;}
 
 <hr size=2 color=#c9c9c9>
 <details open>   <!--  <details open> -->
-<summary><span class="Title">2．山人拆分檢索</span><span style="color:gray;font-size:0.65em;text-align:right;display:inline-block;width:calc(120px);"><b><i>點擊縮展</i></b> ☜</span></summary>
+<summary><span class="Title fnt">2．山人拆分檢索</span><span style="color:gray;font-size:0.65em;text-align:right;display:inline-block;width:calc(120px);"><b><i>點擊縮展</i></b> ☜</span></summary>
 <hr color=#e7e7e7>
-<span class="Line Options"><span class="LabelB">漢字</span>：<input class="Editor" id="input" oninput="searchCharacter(this.value)" style="width: 150px;" placeholder="請輸入漢字"></input><button class="Button" onclick="clearInput()">X</button></span>
+<span class="Line Options fnt"><span class="LabelB">漢字</span>：<input class="Editor fnt" id="input" oninput="searchCharacter(this.value)" style="width: 150px;" placeholder="請輸入漢字"></input><button class="Button" onclick="clearInput()">X</button></span>
 <hr color=#f0f0f0>
 <iframe id="outputFrame" src="output.html" style="border: none; width: 100%; height: 300px;"></iframe>
 </details>
@@ -167,10 +168,10 @@ input::-moz-placeholder {color: #f8e0cd;font-size:14px;}
 
 <hr size=2 color=#c9c9c9>
 <details open>
-<summary><span class="Title">3．山人全息碼查字</span><span style="color:gray;font-size:0.65em;text-align:right;display:inline-block;width:calc(120px);"><b><i>點擊縮展</i></b> ☜</span></summary>
+<summary><span class="Title fnt">3．山人全息碼查字</span><span style="color:gray;font-size:0.65em;text-align:right;display:inline-block;width:calc(120px);"><b><i>點擊縮展</i></b> ☜</span></summary>
 <hr color=#e7e7e7>
-<span class="Line Options"><span class="LabelB">全息碼</span>：<input class="Editor" type="text" id="inputCodeB" oninput="findCharacterB(this.value)" style="width: 150px;" placeholder="請輸入編碼"></input><button class="Button" onclick="clearInputCodeB()">X</button> </span>
-<span class="Line Options"><span class="LabelB" style="position:relative; top:-123px;">漢字：</span><iframe id="resultBFrame" src="resultB.html" style="display: inline-block; border: none; width: 100%; height: 150px;position:relative; top:-7px;"></iframe></span>
+<span class="Line Options fnt"><span class="LabelB">全息碼</span>：<input class="Editor fnt" type="text" id="inputCodeB" oninput="findCharacterB(this.value)" style="width: 150px;" placeholder="請輸入編碼"></input><button class="Button" onclick="clearInputCodeB()">X</button> </span>
+<span class="Line Options fnt"><span class="LabelB" style="position:relative; top:-123px;">漢字：</span><iframe id="resultBFrame" src="resultB.html" style="display: inline-block; border: none; width: 100%; height: 150px;position:relative; top:-7px;"></iframe></span>
 </details>
 
 <script>
