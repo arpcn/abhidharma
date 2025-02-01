@@ -140,7 +140,7 @@ input::-moz-placeholder {color: #f8e0cd;font-size:14px;}
 
 
 <hr size=2 color=#c9c9c9>
-<details open>   <!--  <details open> -->
+<details open>   
 <summary><span class="Title">2．山人拆分檢索</span><span style="color:gray;font-size:0.65em;text-align:right;display:inline-block;width:calc(120px);"><b><i>點擊縮展</i></b> ☜</span></summary>
 <hr color=#e7e7e7>
 <span class="Line Options"><span class="LabelB">漢字</span>：<input class="Editor" id="input" oninput="searchCharacter(this.value)" style="width: 150px;" placeholder="請輸入漢字"></input><button class="Button" onclick="clearInput()">X</button></span>
@@ -174,8 +174,11 @@ input::-moz-placeholder {color: #f8e0cd;font-size:14px;}
 <details open>
 <summary><span class="Title">3．山人全息碼查字</span><span style="color:gray;font-size:0.65em;text-align:right;display:inline-block;width:calc(120px);"><b><i>點擊縮展</i></b> ☜</span></summary>
 <hr color=#e7e7e7>
-<span class="Line Options"><span class="LabelB">全息碼</span>：<input class="Editor" type="text" id="inputCodeB" oninput="findCharacterB(this.value)" style="width: 150px;" placeholder="請輸入編碼"></input><button class="Button" onclick="clearInputCodeB()">X</button> </span>
-<span class="Line Options"><span class="LabelB" style="position:relative; top:-123px;">漢字：</span><iframe id="resultBFrame" src="resultB.html" style="display: inline-block; border: none; width: 100%; height: 150px;position:relative; top:-7px;"></iframe></span>
+<span class="Line Options"><span class="LabelB">全息碼</span>：<input class="Editor" type="text" id="inputCodeB" oninput="findCharacterB()" style="width: 150px;" placeholder="請輸入編碼"></input><button class="Button" onclick="clearInputCodeB()">X</button> </span>
+<!--   <span class="Line Options"><span class="LabelB" style="position:relative; top:-123px;">漢字：</span><iframe id="resultBFrame" src="resultB.html" style="display: inline-block; border: none; width: 100%; height: 150px;position:relative; top:-7px;"></iframe></span> -->
+<span class="Line Options"><span class="LabelB">漢字</span>：
+<span class="Output" id="resultB"></span></span>
+
 </details>
 
 <script>
@@ -183,13 +186,13 @@ input::-moz-placeholder {color: #f8e0cd;font-size:14px;}
         document.getElementById('inputCodeB').value = ''; // 清空输入框
         findCharacterB(''); // 重新更新输出
     }
-      function findCharacterB(inputCodeB) {
+/*      function findCharacterB(inputCodeB) {
         // 获取 iframe
         const iframe = document.getElementById('resultBFrame');
         // 发送消息到 iframe
         iframe.contentWindow.postMessage(inputCodeB, '*');
     }
-/*   接收来自 iframe 的高度信息
+   接收来自 iframe 的高度信息
     window.addEventListener('message', function(event) {
         const height = event.data; // 获取 iframe 发送的高度
         const iframe = document.getElementById('resultBFrame');
@@ -253,6 +256,7 @@ input::-moz-placeholder {color: #f8e0cd;font-size:14px;}
 
     async function loadScripts() {
         const scriptFiles = [
+            'decompose-part0.js',
             'decompose-part0.js'
         ];
 
@@ -323,6 +327,53 @@ input::-moz-placeholder {color: #f8e0cd;font-size:14px;}
         }
     </script>
 
+<!-- UI 程式区3 -->
+    <script src="decompose-part9.js"></script>
+    <script>
+        // 原始数据（以数组形式手动模拟重复键的数据）
+
+        // 重组数据，处理重复键
+        var dataB = {};
+        rawEntries.forEach(entry => {
+            if (!dataB[entry.key]) {
+                dataB[entry.key] = []; // 如果键不存在，就初始化为空数组
+            }
+            dataB[entry.key].push(entry.value); // 将值加入对应的数组
+        });
+
+        // 查询函数
+        function findCharacterB() {
+            const inputCodeB = document.getElementById("inputCodeB").value.trim().toLowerCase();
+            const resultDivB = document.getElementById("resultB");
+            resultDivB.innerHTML = ''; // 清空结果区域
+
+            if (inputCodeB.length === 0) {
+                resultDivB.innerHTML = '<span style="color:gray;font-size:0.65em;font-weight:lighter;">無編碼</span>';
+                return;
+            }
+
+            const resultsB = [];
+            if (inputCodeB.length === 1 || inputCodeB.length === 2) {
+                // 输入1或2个字符时，匹配全码
+                if (dataB[inputCodeB]) {
+                    resultsB.push(...dataB[inputCodeB]);
+                }
+            } else {
+                // 输入3个或更多字符时，匹配以输入字符串开头的所有编码
+                for (const key in dataB) {
+                    if (key.startsWith(inputCodeB)) {
+                        resultsB.push(...dataB[key]);
+                    }
+                }
+            }
+
+            if (resultsB.length > 0) {
+                resultDivB.innerHTML = [...new Set(resultsB)].join("，"); // 去重后显示
+            } else {
+                resultDivB.innerHTML = '<span style="color:gray;font-size:0.65em;font-weight:lighter;">無對應的漢字</span>';
+            }
+        }
+    </script>
 
 
 <!----------------------------------------------------------------------------->

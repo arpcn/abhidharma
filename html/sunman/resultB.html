@@ -175,43 +175,43 @@ button:hover{color:#FF00FF}
         // 原始数据（以数组形式手动模拟重复键的数据）
         
         // 重组数据，处理重复键
-        var data = {};
+        var dataB = {};
         rawEntries.forEach(entry => {
-            if (!data[entry.key]) {
-                data[entry.key] = []; // 如果键不存在，就初始化为空数组
+            if (!dataB[entry.key]) {
+                dataB[entry.key] = []; // 如果键不存在，就初始化为空数组
             }
-            data[entry.key].push(entry.value); // 将值加入对应的数组
+            dataB[entry.key].push(entry.value); // 将值加入对应的数组
         });
 
         // 查询函数
         function findCharacterB(inputCodeB) {
-            const resultDiv = document.getElementById("resultB");
-            resultDiv.innerHTML = ''; // 清空结果区域
+            const resultDivB = document.getElementById("resultB");
+            resultDivB.innerHTML = ''; // 清空结果区域
 
             if (inputCodeB.length === 0) {
-                resultDiv.innerHTML = '<span style="color:gray;font-size:0.65em;font-weight:lighter;">無編碼</span>';
+                resultDivB.innerHTML = '<span style="color:gray;font-size:0.65em;font-weight:lighter;">無編碼</span>';
                 return;
             }
 
-            const results = [];
+            const resultsB = [];
             if (inputCodeB.length === 1 || inputCodeB.length === 2) {
                 // 输入1或2个字符时，匹配全码
-                if (data[inputCodeB]) {
-                    results.push(...data[inputCodeB]);
+                if (dataB[inputCodeB]) {
+                    resultsB.push(...dataB[inputCodeB]);
                 }
             } else {
                 // 输入3个或更多字符时，匹配以输入字符串开头的所有编码
-                for (const key in data) {
+                for (const key in dataB) {
                     if (key.startsWith(inputCodeB)) {
-                        results.push(...data[key]);
+                        resultsB.push(...dataB[key]);
                     }
                 }
             }
 
-            if (results.length > 0) {
-                resultDiv.innerHTML = [...new Set(results)].join("，"); // 去重后显示
+            if (resultsB.length > 0) {
+                resultDivB.innerHTML = [...new Set(resultsB)].join("，"); // 去重后显示
             } else {
-                resultDiv.innerHTML = '<span style="color:gray;font-size:0.65em;font-weight:lighter;">無對應的漢字</span>';
+                resultDivB.innerHTML = '<span style="color:gray;font-size:0.65em;font-weight:lighter;">無對應的漢字</span>';
             }
         }
 
