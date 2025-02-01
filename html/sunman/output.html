@@ -103,7 +103,42 @@ button:hover{color:#FF00FF}
 <span class="Line Output" id="output"><br><br><br></span>
 
 
+<!-- 字體1 -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/fontfaceobserver/2.1.0/fontfaceobserver.standalone.js"></script>
 <script>
+    // 定义一个异步加载的函数
+    function loadFonts() {
+        const font1 = new FontFaceObserver('ziti1');
+        const font2 = new FontFaceObserver('ziti2');
+        const font3 = new FontFaceObserver('ziti3');
+        const font4 = new FontFaceObserver('ziti4');
+
+        // 显示加载提示
+        const loadingfDiv = document.getElementById('loadingf');
+        loadingfDiv.style.display = 'block';
+
+        // 使用 Promise.all 并行加载所有字体
+        Promise.all([
+            font1.load(),
+            font2.load(),
+            font3.load(),
+            font4.load()
+        ]).then(function () {
+            // 为 HTML 添加一个 class，表示字体已加载
+            document.documentElement.classList.add('fonts-loaded');
+        }).catch(function (err) {
+       //      console.error('字体加载失败:', err);
+        }).finally(function () {
+            // 隐藏加载提示
+            loadingfDiv.style.display = 'none';
+        });
+    }
+
+    // 调用字体加载函数
+    loadFonts();
+</script>
+
+<script> // 加载数据 
     function loadScript(src) {
         return new Promise((resolve, reject) => {
             const script = document.createElement('script');
@@ -201,41 +236,6 @@ button:hover{color:#FF00FF}
 
 </script>
 
-
-<!-- 字體1 -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/fontfaceobserver/2.1.0/fontfaceobserver.standalone.js"></script>
-<script>
-    // 定义一个异步加载的函数
-    function loadFonts() {
-        const font1 = new FontFaceObserver('ziti1');
-        const font2 = new FontFaceObserver('ziti2');
-        const font3 = new FontFaceObserver('ziti3');
-        const font4 = new FontFaceObserver('ziti4');
-
-        // 显示加载提示
-        const loadingfDiv = document.getElementById('loadingf');
-        loadingfDiv.style.display = 'block';
-
-        // 使用 Promise.all 并行加载所有字体
-        Promise.all([
-            font1.load(),
-            font2.load(),
-            font3.load(),
-            font4.load()
-        ]).then(function () {
-            // 为 HTML 添加一个 class，表示字体已加载
-            document.documentElement.classList.add('fonts-loaded');
-        }).catch(function (err) {
-       //      console.error('字体加载失败:', err);
-        }).finally(function () {
-            // 隐藏加载提示
-            loadingfDiv.style.display = 'none';
-        });
-    }
-
-    // 调用字体加载函数
-    loadFonts();
-</script>
 
 </body>
 </html>
