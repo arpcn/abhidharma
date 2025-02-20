@@ -199,8 +199,52 @@ button:hover{color:#FF00FF}
             if (results.length > 0) {
                 // 去掉第一个半角冒号前的部分
                 var filteredResults = results.map(entry => {
+
+        // 提取汉字和编码信息
+        var match = entry.match(/^(.+?):([^ ]+?_([^ _]+?)\)<br>編碼[^ ]+】■?)(cf. .+|)$/);
+
+        if (match) {
+            var character = match[1].trim();
+            var contentA = match[2].trim();
+            var content_cf = match[4].trim();
+            var code = match[3].trim();
+    // 定义图片和链接的基本 URL
+    var imagesBaseUrl = "https://ziphoenicia-1300189285.cos.ap-shanghai.myqcloud.com/code_chart_14/";
+    var glyphBaseUrl = "https://glyphwiki.org/glyph/";
+
+            // 生成图片内容
+            var imageContent1 = `
+                <div class="image-cnt">
+                    G<img class="img" src="${imagesBaseUrl}${character}_G.svg">
+                    H<img class="img" src="${imagesBaseUrl}${character}_H.svg">
+                    T<img class="img" src="${imagesBaseUrl}${character}_T.svg">
+                    J<img class="img" src="${imagesBaseUrl}${character}_J.svg">
+                    K<img class="img" src="${imagesBaseUrl}${character}_K.svg">
+                    V<img class="img" src="${imagesBaseUrl}${character}_V.svg">
+                    0<img class="img" src="${glyphBaseUrl}u${code}.svg">
+                </div>
+                <div class="image-cnt">
+                    G<img class="img" src="${glyphBaseUrl}u${code}-g.svg">
+                    H<img class="img" src="${glyphBaseUrl}u${code}-h.svg">
+                    T<img class="img" src="${glyphBaseUrl}u${code}-t.svg">
+                    J<img class="img" src="${glyphBaseUrl}u${code}-j.svg">
+                    K<img class="img" src="${glyphBaseUrl}u${code}-k.svg">
+                    V<img class="img" src="${glyphBaseUrl}u${code}-v.svg">
+                    KP<img class="img" src="${glyphBaseUrl}u${code}-kp.svg">
+                </div>
+                <a href="${glyphBaseUrl}u${code}" class="Out">字形</a>　
+                <a href="http://www.zisea.com/zscontent.asp?uni=${code}" class="Out">字海</a>　
+                <a href="http://yedict.com/zscontent.asp?uni=${code}" class="Out">叶典</a>　
+                <a href="https://www.zdic.net/hans/${character}" class="Out">汉典</a>　
+                <a href="https://zi.tools/zi/${character}" class="Out">字統</a><br>
+            `;
+
+            // 返回完整的条目
+            return contentA + imageContent1 + content_cf ;
+        }
                     let index = entry.indexOf(':'); // 找到第一个冒号的位置
                     return index !== -1 ? entry.substring(index + 1) : ''; // 返回冒号后的部分
+
                 }).join('<br>'); // 将结果连接为字符串
                 output.innerHTML = filteredResults; // 将结果显示在输出区域
             } else {
