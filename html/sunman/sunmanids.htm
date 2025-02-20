@@ -148,11 +148,11 @@ input::-moz-placeholder {color: #f8e0cd;font-size:14px;}
 </div>
 
 
-<!-- 字體1 -->
+<!-- 字體 -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/fontfaceobserver/2.1.0/fontfaceobserver.standalone.js"></script>
 
 <script>
-    // 字體
+// ----- 字體 ----- 
     // 定义一个异步加载的函数
     function loadFonts() {
         const font1 = new FontFaceObserver('ziti1');
@@ -186,7 +186,7 @@ input::-moz-placeholder {color: #f8e0cd;font-size:14px;}
     loadFonts();
 
 
- // 加载数据 
+//  ----- 加载数据库  ----- 
     function loadScript(src) {
         return new Promise((resolve, reject) => {
             const script = document.createElement('script');
@@ -221,7 +221,7 @@ input::-moz-placeholder {color: #f8e0cd;font-size:14px;}
     loadScripts();
 
 
- // 输入框
+//  ----- 输入框 ----- 
     function clearInputCode() {
         document.getElementById('inputCode').value = ''; // 清空输入框
         findCharacter(''); // 重新更新输出
@@ -238,7 +238,7 @@ input::-moz-placeholder {color: #f8e0cd;font-size:14px;}
     }
 
 
-<!-- UI 程式区1 -->
+//  ----- UI 程式区1  ----- 
         function findCharacter() {
             const inputCode = document.getElementById("inputCode").value.trim().toLowerCase();
             var resultDiv = document.getElementById('result');
@@ -273,9 +273,47 @@ input::-moz-placeholder {color: #f8e0cd;font-size:14px;}
             } else {
                 resultDiv.innerHTML = '<span style="color:gray;font-size:0.65em;font-weight:lighter;">無對應的漢字</span>';
             }
+          }
+
+
+//  ----- UI 程式区3  ----- 
+        function findCharacterB() {
+            const inputCodeB = document.getElementById("inputCodeB").value.trim().toLowerCase();
+            var resultDivB = document.getElementById('resultB');
+            resultB = ''; // 清空结果区域
+
+            if (inputCodeB.length === 0) {
+                resultDivB.innerHTML = '<span style="color:gray;font-size:0.65em;font-weight:lighter;">無編碼</span>';
+                return;
             }
 
-<!-- UI 程式区2 -->
+            dt.forEach(function(entry) {
+                // 判断输入字符长度以决定匹配方式
+                var regex;
+                if (inputCodeB.length <= 2) {
+                    // 全字匹配
+                    regex = new RegExp(`_${inputCodeB}$`, 'i');
+                } else {
+                    // 启动匹配以输入字符开始
+                    regex = new RegExp(`_${inputCodeB}[a-z]*(_|$)`, 'i'); // 'i' 标记用于不区分大小写
+                }
+
+                if (regex.test(entry)) {
+                    // 找到匹配的内容，提取 ":" 前的字符
+                    var charBeforeColon = entry.split(':')[0];
+                    resultB += charBeforeColon + '、';
+                }
+            });
+
+            // 显示结果
+            if (resultB) {
+                resultDivB.innerHTML = '' + resultB;
+            } else {
+                resultDivB.innerHTML = '<span style="color:gray;font-size:0.65em;font-weight:lighter;">無對應的漢字</span>';
+            }
+        }
+
+//  ----- UI 程式区2  ----- 
 
     function searchCharacter() {
         const input = document.getElementById("input").value.trim().toLowerCase();
@@ -288,7 +326,7 @@ input::-moz-placeholder {color: #f8e0cd;font-size:14px;}
                 var filteredResults = results.map(entry => {
 
         // 提取汉字和编码信息
-        var match = entry.match(/^(.+?):([^ ]+?),(編碼[^ ]+】■?)(cf. .+|)_[a-z]+$/);
+        var match = entry.match(/^(.+?):([^ ]+?),([^ ]+】■?)(cf. .+|)_[a-z]+_[a-z]+$/);
 
         if (match) {
             var character = match[1].trim();
@@ -352,7 +390,7 @@ input::-moz-placeholder {color: #f8e0cd;font-size:14px;}
                 <a href="https://glyphwiki.org/wiki/u${code}" class="Out">字形</a>　<a href="http://www.zisea.com/zscontent.asp?uni=${codeu}" class="Out">字海</a>　<a href="http://yedict.com/zscontent.asp?uni=${codeu}" class="Out">叶典</a>　<a href="https://www.zdic.net/hans/${character}" class="Out">汉典</a>　<a href="https://zi.tools/zi/${character}" class="Out">字統</a><br>`;
 
             // 返回完整的条目
-            return character + "：" + contentA + "(" + sortz + "_" + codeu + ")<br>" + contentB + imageContent1 + content_cf ;
+            return character + "：" + contentA + "(" + sortz + "_" + codeu + ")<br>編碼：" + contentB + imageContent1 + content_cf ;
         }else {
              //        let index = entry.indexOf(':'); //找到第一个冒号的位置
              //        return index !== -1 ? entry.substring(index + 1) : ''; // 返回冒号后的部分
@@ -365,50 +403,6 @@ input::-moz-placeholder {color: #f8e0cd;font-size:14px;}
         }
     }
 
-
-<!-- UI 程式区3 -->
-        function findCharacterB() {
-            const inputCodeB = document.getElementById("inputCodeB").value.trim().toLowerCase();
-            var resultDivB = document.getElementById('resultB');
-            resultB = ''; // 清空结果区域
-
-            if (inputCodeB.length === 0) {
-                resultDivB.innerHTML = '<span style="color:gray;font-size:0.65em;font-weight:lighter;">無編碼</span>';
-                return;
-            }
-
-            dt.forEach(function(entry) {
-                // 判断输入字符长度以决定匹配方式
-                var regex;
-                if (inputCodeB.length <= 2) {
-                    // 全字匹配
-                    regex = new RegExp(`_${inputCodeB}$`, 'i');
-                } else {
-                    // 启动匹配以输入字符开始
-                    regex = new RegExp(`_(${inputCodeB}[a-z]*$)`, 'i'); // 'i' 标记用于不区分大小写
-                }
-
-                if (regex.test(entry)) {
-                    // 找到匹配的内容，提取 ":" 前的字符
-                    var charBeforeColon = entry.split(':')[0];
-                    resultB += charBeforeColon + '、';
-                }
-            });
-
-            // 显示结果
-            if (resultB) {
-                resultDivB.innerHTML = '' + resultB;
-            } else {
-                resultDivB.innerHTML = '<span style="color:gray;font-size:0.65em;font-weight:lighter;">無對應的漢字</span>';
-            }
-            }
-
-    </script>
-
-
-
-
-
-<!----------------------------------------------------------------------------->
+</script>
 
 </body></html>
