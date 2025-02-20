@@ -87,6 +87,10 @@ input::-ms-input-placeholder {color: #f8e0cd;font-size:14px;}
 input::placeholder {color: #f8e0cd;font-size:14px;} 
 input::-webkit-input-placeholder {color: #f8e0cd;font-size:14px;} 
 input::-moz-placeholder {color: #f8e0cd;font-size:14px;} 
+        #loading {
+            display: none; /* 默认隐藏 */
+            color: #f26f0d;font-size:0.8em;
+        }
         #loadingf {
             display: none; /* 默认隐藏 */
             color: #f26f0d;font-size:0.8em;
@@ -110,6 +114,7 @@ input::-moz-placeholder {color: #f8e0cd;font-size:14px;}
 <span class="Line Options"><span class="LabelB">編碼</span>：<input class="Editor" type="text" id="inputCode" oninput="findCharacter()" style="width: 150px;" placeholder="請輸入編碼"></input><button class="Button" onclick="clearInputCode()">X</button> <span style="color:gray;font-size:0.65em; text-align:right;display:inline-block;width:calc(230px);">輸入法：1.<a href="https://github.com/arpcn/rime-shanren3/wiki/RimeSetup">Rime小狼毫</a> 2.<a href="https://github.com/arpcn/rime-shanren3/blob/master/rimesetup/山人輸入法強化訓練.rar">山人輸入法學習</a></span></span>
 <span class="Line Options"><span class="LabelB">漢字</span>：
 <span id="loadingf" class="Options" style="display:inline-block;">字體加載中...</span>
+<span id="loading" class="Options" style="display:inline-block;">數據加載中，請稍候...</span>
 <span class="Output" id="result"></span></span>
 </details>
 
@@ -142,7 +147,6 @@ input::-moz-placeholder {color: #f8e0cd;font-size:14px;}
 </div>
 </div>
 
-<script src="db.js"></script>
 
 <!-- 字體 -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/fontfaceobserver/2.1.0/fontfaceobserver.standalone.js"></script>
@@ -180,6 +184,41 @@ input::-moz-placeholder {color: #f8e0cd;font-size:14px;}
 
     // 调用字体加载函数
     loadFonts();
+
+
+//  ----- 加载数据库  ----- 
+    function loadScript(src) {
+        return new Promise((resolve, reject) => {
+            const script = document.createElement('script');
+            script.src = src;
+            script.onload = () => resolve();
+            script.onerror = () => reject(new Error(`加载脚本失败: ${src}`));
+            document.head.appendChild(script);
+        });
+    }
+
+    async function loadScripts() {
+        const scriptFiles = [
+            'db.js'
+        ];
+
+        // 显示加载提示
+        document.getElementById('loading').style.display = 'block';
+
+        // 等待所有脚本加载完成
+        try {
+            await Promise.all(scriptFiles.map(file => loadScript(file)));
+        } catch (error) {
+            console.error(error);
+        } finally {
+            // 隐藏加载提示并显示内容
+            document.getElementById('loading').style.display = 'none';
+        //      document.getElementById('content').style.display = 'block';
+        }
+    }
+
+    // 初始化加载过程
+    loadScripts();
 
 
 //  ----- 输入框 ----- 
@@ -287,7 +326,7 @@ input::-moz-placeholder {color: #f8e0cd;font-size:14px;}
                 var filteredResults = results.map(entry => {
 
         // 提取汉字和编码信息
-        var match = entry.match(/^(.+?):([^ ]+?),([^ ]+】■?)(cf. .+|)_[a-z]+_[a-z]+$/);
+        var match = entry.match(/^(.+?):([^ ]+?),([^ ]+】■?)(cf. .+|)_[a-z]+(_[a-z]+|)$/);
 
         if (match) {
             var character = match[1].trim();
