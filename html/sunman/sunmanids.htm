@@ -357,12 +357,7 @@ input::-moz-placeholder {color: #f8e0cd;font-size:14px;}
                     V<img class="img" src="${glyphBaseUrl}u${code}-v.svg">
                     KP<img class="img" src="${glyphBaseUrl}u${code}-kp.svg">
                 </div>
-                <a href="https://glyphwiki.org/wiki/u${code}" class="Out">字形</a>　
-                <a href="http://www.zisea.com/zscontent.asp?uni=${codeu}" class="Out">字海</a>　
-                <a href="http://yedict.com/zscontent.asp?uni=${codeu}" class="Out">叶典</a>　
-                <a href="https://www.zdic.net/hans/${character}" class="Out">汉典</a>　
-                <a href="https://zi.tools/zi/${character}" class="Out">字統</a><br>
-            `;
+                <a href="https://glyphwiki.org/wiki/u${code}" class="Out">字形</a>　<a href="http://www.zisea.com/zscontent.asp?uni=${codeu}" class="Out">字海</a>　<a href="http://yedict.com/zscontent.asp?uni=${codeu}" class="Out">叶典</a>　<a href="https://www.zdic.net/hans/${character}" class="Out">汉典</a>　<a href="https://zi.tools/zi/${character}" class="Out">字統</a><br>`;
 
             // 返回完整的条目
             return character + "：" + contentA + "(" + sortz + "_" + codeu + ")<br>" + contentB + imageContent1 + content_cf ;
