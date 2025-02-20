@@ -134,7 +134,7 @@ input::-moz-placeholder {color: #f8e0cd;font-size:14px;}
 <hr color=#e7e7e7>
 <span class="Line Options"><span class="LabelB">漢字</span>：<input class="Editor" id="input" oninput="searchCharacter()" style="width: 150px;" placeholder="請輸入漢字"></input><button class="Button" onclick="clearInput()">X</button></span>
 <hr color=#f0f0f0>
-<span class="Output" id="output"><br><br><br></span>
+<span class="Output" id="output"><br><br><br><br><br></span>
 </details>
 
 
@@ -288,7 +288,7 @@ input::-moz-placeholder {color: #f8e0cd;font-size:14px;}
     function searchCharacter() {
         const input = document.getElementById("input").value.trim().toLowerCase();
         var output = document.getElementById('output'); // 获取输出区域
-        output.innerHTML = ''; // 清空输出区域
+        output.innerHTML = '<br><br><br><br><br>'; // 清空输出区域
         if (input) {
             var results = dt.filter(entry => entry.startsWith(input)); // 根据输入内容过滤结果
             if (results.length > 0) {
@@ -373,7 +373,7 @@ input::-moz-placeholder {color: #f8e0cd;font-size:14px;}
                 }).join('<br>'); // 将结果连接为字符串
                 output.innerHTML = filteredResults; // 将结果显示在输出区域
             } else {
-                output.innerHTML = '<span style="color:gray;font-size:0.75em;font-weight:lighter;">未找到相關結果，請輸入單個漢字</span>'; // 找不到结果时的提示
+                output.innerHTML = '<span style="color:gray;font-size:0.75em;font-weight:lighter;">未找到相關結果，請輸入單個漢字</span><br><br><br><br><br>'; // 找不到结果时的提示
             }
         }
     }
