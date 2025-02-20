@@ -15,6 +15,7 @@
 @font-face {
     font-family: 'ziti1';
     src: url('SunmanPUA.ttf') format('truetype');
+/*    font-display: swap; */
 }
 @font-face {
     font-family: 'ziti2';
@@ -123,18 +124,6 @@ input::-moz-placeholder {color: #f8e0cd;font-size:14px;}
         document.getElementById('inputCode').value = ''; // 清空输入框
         findCharacter(''); // 重新更新输出
     }
-/*      function findCharacter(inputCode) {
-        // 获取 iframe
-        const iframe = document.getElementById('resultFrame');
-        // 发送消息到 iframe
-        iframe.contentWindow.postMessage(inputCode, '*');
-    }
-   接收来自 iframe 的高度信息
-    window.addEventListener('message', function(event) {
-        const height = event.data; // 获取 iframe 发送的高度
-        const iframe = document.getElementById('resultFrame');
-        iframe.style.height = height + 'px'; // 设置 iframe 的高度
-    });*/
 </script>
 
 
@@ -143,9 +132,9 @@ input::-moz-placeholder {color: #f8e0cd;font-size:14px;}
 <details open>   
 <summary><span class="Title">2．山人拆分檢索</span><span style="color:gray;font-size:0.65em;text-align:right;display:inline-block;width:calc(120px);"><b><i>點擊縮展</i></b> ☜</span></summary>
 <hr color=#e7e7e7>
-<span class="Line Options"><span class="LabelB">漢字</span>：<input class="Editor" id="input" oninput="searchCharacter(this.value)" style="width: 150px;" placeholder="請輸入漢字"></input><button class="Button" onclick="clearInput()">X</button></span>
+<span class="Line Options"><span class="LabelB">漢字</span>：<input class="Editor" id="input" oninput="searchCharacter()" style="width: 150px;" placeholder="請輸入漢字"></input><button class="Button" onclick="clearInput()">X</button></span>
 <hr color=#f0f0f0>
-<iframe id="outputFrame" src="output.html" style="border: none; width: 100%; height: 300px;"></iframe>
+<span class="Output" id="output"><br><br><br></span>
 </details>
 
 
@@ -155,17 +144,6 @@ input::-moz-placeholder {color: #f8e0cd;font-size:14px;}
         searchCharacter(''); // 重新更新输出
     }
 
-    function searchCharacter(input) {
-        const iframe = document.getElementById('outputFrame');
-        // 发送消息到 iframe
-        iframe.contentWindow.postMessage(input, '*');
-    }
-
-/*    window.addEventListener('message', function(event) {
-        const height = event.data; // 获取 iframe 发送的高度
-        const iframe = document.getElementById('outputFrame');
-        iframe.style.height = height + 'px'; // 设置 iframe 的高度
-    });    */
 
 </script>
 
@@ -186,18 +164,6 @@ input::-moz-placeholder {color: #f8e0cd;font-size:14px;}
         document.getElementById('inputCodeB').value = ''; // 清空输入框
         findCharacterB(''); // 重新更新输出
     }
-/*      function findCharacterB(inputCodeB) {
-        // 获取 iframe
-        const iframe = document.getElementById('resultBFrame');
-        // 发送消息到 iframe
-        iframe.contentWindow.postMessage(inputCodeB, '*');
-    }
-   接收来自 iframe 的高度信息
-    window.addEventListener('message', function(event) {
-        const height = event.data; // 获取 iframe 发送的高度
-        const iframe = document.getElementById('resultBFrame');
-        iframe.style.height = height + 'px'; // 设置 iframe 的高度
-    });*/
 </script>
 
 
@@ -256,8 +222,7 @@ input::-moz-placeholder {color: #f8e0cd;font-size:14px;}
 
     async function loadScripts() {
         const scriptFiles = [
-            'decompose-part0.js',
-            'decompose-part0.js'
+            'db.js'
         ];
 
         // 显示加载提示
@@ -279,101 +244,182 @@ input::-moz-placeholder {color: #f8e0cd;font-size:14px;}
     loadScripts();
 </script>
 
-<!-- UI 程式区1 -->
-    <script src="decompose-part0.js"></script>
+    <script src="db.js"></script>
     <script>
-        // 原始数据（以数组形式手动模拟重复键的数据）
-
-        // 重组数据，处理重复键
-        var data = {};
-        rawEntries.forEach(entry => {
-            if (!data[entry.key]) {
-                data[entry.key] = []; // 如果键不存在，就初始化为空数组
-            }
-            data[entry.key].push(entry.value); // 将值加入对应的数组
-        });
-
-        // 查询函数
+<!-- UI 程式区1 -->
         function findCharacter() {
-            const input = document.getElementById("inputCode").value.trim().toLowerCase();
-            const resultDiv = document.getElementById("result");
-            resultDiv.innerHTML = ''; // 清空结果区域
+            const inputCode = document.getElementById("inputCode").value.trim().toLowerCase();
+            var resultDiv = document.getElementById('result');
+            result = ''; // 清空结果区域
 
-            if (input.length === 0) {
+            if (inputCode.length === 0) {
                 resultDiv.innerHTML = '<span style="color:gray;font-size:0.65em;font-weight:lighter;">無編碼</span>';
                 return;
             }
 
-            const results = [];
-            if (input.length === 1 || input.length === 2) {
-                // 输入1或2个字符时，匹配全码
-                if (data[input]) {
-                    results.push(...data[input]);
+            dt.forEach(function(entry) {
+                // 判断输入字符长度以决定匹配方式
+                var regex;
+                if (inputCode.length <= 2) {
+                    // 全字匹配
+                    regex = new RegExp(`【${inputCode}】`, 'i');
+                } else {
+                    // 启动匹配以输入字符开始
+                    regex = new RegExp(`【(${inputCode})[a-z]*】`, 'i'); // 'i' 标记用于不区分大小写
                 }
-            } else {
-                // 输入3个或更多字符时，匹配以输入字符串开头的所有编码
-                for (const key in data) {
-                    if (key.startsWith(input)) {
-                        results.push(...data[key]);
-                    }
-                }
-            }
 
-            if (results.length > 0) {
-                resultDiv.innerHTML = [...new Set(results)].join("，"); // 去重后显示
+                if (regex.test(entry)) {
+                    // 找到匹配的内容，提取 ":" 前的字符
+                    var charBeforeColon = entry.split(':')[0];
+                    result += charBeforeColon + '、';
+                }
+            });
+
+            // 显示结果
+            if (result) {
+                resultDiv.innerHTML = '' + result;
             } else {
                 resultDiv.innerHTML = '<span style="color:gray;font-size:0.65em;font-weight:lighter;">無對應的漢字</span>';
             }
+            }
+
+<!-- UI 程式区2 -->
+
+    function searchCharacter() {
+        const input = document.getElementById("input").value.trim().toLowerCase();
+        var output = document.getElementById('output'); // 获取输出区域
+        output.innerHTML = ''; // 清空输出区域
+        if (input) {
+            var results = dt.filter(entry => entry.startsWith(input)); // 根据输入内容过滤结果
+            if (results.length > 0) {
+                // 去掉第一个半角冒号前的部分
+                var filteredResults = results.map(entry => {
+
+        // 提取汉字和编码信息
+        var match = entry.match(/^(.+?):([^ ]+?),(編碼[^ ]+】■?)(cf. .+|)_[a-z]+$/);
+
+        if (match) {
+            var character = match[1].trim();
+            var contentA = match[2].trim();
+            var contentB = match[3].trim();
+            var content_cf = match[4].trim();
+    // 定义图片和链接的基本 URL
+    var imagesBaseUrl = "https://ziphoenicia-1300189285.cos.ap-shanghai.myqcloud.com/code_chart_14/";
+    var glyphBaseUrl = "https://glyphwiki.org/glyph/";
+        var sortz  = ""
+
+        var unicodeValue = character.codePointAt(0);
+        var code = unicodeValue.toString(16);
+        var codeu = unicodeValue.toString(16).toUpperCase();
+        if (unicodeValue >= 0x2E80 && unicodeValue <= 0x2EF3) { var sortz = "部首补充"}
+        if (unicodeValue >= 0x2F00 && unicodeValue <= 0x2FD5) { var sortz = "康熙部首"}
+        if (unicodeValue >= 0x2FF0 && unicodeValue <= 0x2FFB) { var sortz = "文字序列"}
+        if (unicodeValue >= 0x3003 && unicodeValue <= 0x3037) { var sortz = "符号和标点"}
+        if (unicodeValue >= 0x3044 && unicodeValue <= 0x309B) { var sortz = "平假名"}
+        if (unicodeValue >= 0x30AD && unicodeValue <= 0x30FF) { var sortz = "片假名"}
+        if (unicodeValue >= 0x3105 && unicodeValue <= 0x312F) { var sortz = "注音符号"}
+        if (unicodeValue >= 0x3148 && unicodeValue <= 0x3152) { var sortz = "谚文兼容"}
+        if (unicodeValue >= 0x31C0 && unicodeValue <= 0x31E3) { var sortz = "笔画"}
+        if (unicodeValue >= 0x3400 && unicodeValue <= 0x4DBF) { var sortz = "ExtA"}
+        if (unicodeValue >= 0x4E00 && unicodeValue <= 0x9FFF) { var sortz = "CJK"}
+        if (unicodeValue >= 0xE400 && unicodeValue <= 0xE5EF) { var sortz = "私用区S"}
+        if (unicodeValue >= 0xE612 && unicodeValue <= 0xE6F8) { var sortz = "私用区"}
+        if (unicodeValue >= 0xE740 && unicodeValue <= 0xE77A) { var sortz = "私用区S"}
+        if (unicodeValue >= 0xE815 && unicodeValue <= 0xE864) { var sortz = "私用区80"}
+        if (unicodeValue >= 0xF900 && unicodeValue <= 0xFAD9) { var sortz = "兼容文字"}
+        if (unicodeValue >= 0x20000 && unicodeValue <= 0x2A6DF) { var sortz = "ExtB"}
+        if (unicodeValue >= 0x2A700 && unicodeValue <= 0x2B739) { var sortz = "ExtC"}
+        if (unicodeValue >= 0x2B740 && unicodeValue <= 0x2B81D) { var sortz = "ExtD"}
+        if (unicodeValue >= 0x2B820 && unicodeValue <= 0x2CEA1) { var sortz = "ExtE"}
+        if (unicodeValue >= 0x2CEB0 && unicodeValue <= 0x2EBE0) { var sortz = "ExtF"}
+        if (unicodeValue >= 0x2EBF0 && unicodeValue <= 0x2EE5D) { var sortz = "ExtI"}
+        if (unicodeValue >= 0x2F800 && unicodeValue <= 0x2FA1D) { var sortz = "兼容增补"}
+        if (unicodeValue >= 0x30000 && unicodeValue <= 0x3134A) { var sortz = "ExtG"}
+        if (unicodeValue >= 0x31350 && unicodeValue <= 0x323AF) { var sortz = "ExtH"}
+
+            // 生成图片内容
+            var imageContent1 = `
+                <div class="image-cnt">
+                    G<img class="img" src="${imagesBaseUrl}${character}_G.svg">
+                    H<img class="img" src="${imagesBaseUrl}${character}_H.svg">
+                    T<img class="img" src="${imagesBaseUrl}${character}_T.svg">
+                    J<img class="img" src="${imagesBaseUrl}${character}_J.svg">
+                    K<img class="img" src="${imagesBaseUrl}${character}_K.svg">
+                    V<img class="img" src="${imagesBaseUrl}${character}_V.svg">
+                    0<img class="img" src="${glyphBaseUrl}u${code}.svg">
+                </div>
+                <div class="image-cnt">
+                    G<img class="img" src="${glyphBaseUrl}u${code}-g.svg">
+                    H<img class="img" src="${glyphBaseUrl}u${code}-h.svg">
+                    T<img class="img" src="${glyphBaseUrl}u${code}-t.svg">
+                    J<img class="img" src="${glyphBaseUrl}u${code}-j.svg">
+                    K<img class="img" src="${glyphBaseUrl}u${code}-k.svg">
+                    V<img class="img" src="${glyphBaseUrl}u${code}-v.svg">
+                    KP<img class="img" src="${glyphBaseUrl}u${code}-kp.svg">
+                </div>
+                <a href="https://glyphwiki.org/wiki/u${code}" class="Out">字形</a>　
+                <a href="http://www.zisea.com/zscontent.asp?uni=${codeu}" class="Out">字海</a>　
+                <a href="http://yedict.com/zscontent.asp?uni=${codeu}" class="Out">叶典</a>　
+                <a href="https://www.zdic.net/hans/${character}" class="Out">汉典</a>　
+                <a href="https://zi.tools/zi/${character}" class="Out">字統</a><br>
+            `;
+
+            // 返回完整的条目
+            return character + "：" + contentA + "(" + sortz + "_" + codeu + ")<br>" + contentB + imageContent1 + content_cf ;
+        }else {
+             //        let index = entry.indexOf(':'); //找到第一个冒号的位置
+             //        return index !== -1 ? entry.substring(index + 1) : ''; // 返回冒号后的部分
+                }
+                }).join('<br>'); // 将结果连接为字符串
+                output.innerHTML = filteredResults; // 将结果显示在输出区域
+            } else {
+                output.innerHTML = '<span style="color:gray;font-size:0.75em;font-weight:lighter;">未找到相關結果，請輸入單個漢字</span>'; // 找不到结果时的提示
+            }
         }
-    </script>
+    }
+
 
 <!-- UI 程式区3 -->
-    <script src="decompose-part9.js"></script>
-    <script>
-        // 原始数据（以数组形式手动模拟重复键的数据）
-
-        // 重组数据，处理重复键
-        var dataB = {};
-        rawEntries.forEach(entry => {
-            if (!dataB[entry.key]) {
-                dataB[entry.key] = []; // 如果键不存在，就初始化为空数组
-            }
-            dataB[entry.key].push(entry.value); // 将值加入对应的数组
-        });
-
-        // 查询函数
         function findCharacterB() {
             const inputCodeB = document.getElementById("inputCodeB").value.trim().toLowerCase();
-            const resultDivB = document.getElementById("resultB");
-            resultDivB.innerHTML = ''; // 清空结果区域
+            var resultDivB = document.getElementById('resultB');
+            resultB = ''; // 清空结果区域
 
             if (inputCodeB.length === 0) {
                 resultDivB.innerHTML = '<span style="color:gray;font-size:0.65em;font-weight:lighter;">無編碼</span>';
                 return;
             }
 
-            const resultsB = [];
-            if (inputCodeB.length === 1 || inputCodeB.length === 2) {
-                // 输入1或2个字符时，匹配全码
-                if (dataB[inputCodeB]) {
-                    resultsB.push(...dataB[inputCodeB]);
+            dt.forEach(function(entry) {
+                // 判断输入字符长度以决定匹配方式
+                var regex;
+                if (inputCodeB.length <= 2) {
+                    // 全字匹配
+                    regex = new RegExp(`_${inputCodeB}$`, 'i');
+                } else {
+                    // 启动匹配以输入字符开始
+                    regex = new RegExp(`_(${inputCodeB}[a-z]*$)`, 'i'); // 'i' 标记用于不区分大小写
                 }
-            } else {
-                // 输入3个或更多字符时，匹配以输入字符串开头的所有编码
-                for (const key in dataB) {
-                    if (key.startsWith(inputCodeB)) {
-                        resultsB.push(...dataB[key]);
-                    }
-                }
-            }
 
-            if (resultsB.length > 0) {
-                resultDivB.innerHTML = [...new Set(resultsB)].join("，"); // 去重后显示
+                if (regex.test(entry)) {
+                    // 找到匹配的内容，提取 ":" 前的字符
+                    var charBeforeColon = entry.split(':')[0];
+                    resultB += charBeforeColon + '、';
+                }
+            });
+
+            // 显示结果
+            if (resultB) {
+                resultDivB.innerHTML = '' + resultB;
             } else {
                 resultDivB.innerHTML = '<span style="color:gray;font-size:0.65em;font-weight:lighter;">無對應的漢字</span>';
             }
-        }
+            }
+
     </script>
+
+
+
 
 
 <!----------------------------------------------------------------------------->
