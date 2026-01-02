@@ -1,6 +1,17 @@
 
 {
-
+  "redirects": [
+    {
+      "source": "/",
+      "destination": "https://io1.arpcn.top",
+      "permanent": true
+    },
+    {
+      "source": "/(.*)",
+      "destination": "https://io1.arpcn.top/\$1",
+      "permanent": true
+    }
+  ],
   "rewrites": [
     {
       "source": "/abhidharma/",
