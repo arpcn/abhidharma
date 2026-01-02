@@ -3,12 +3,12 @@
   "redirects": [
     {
       "source": "/",
-      "destination": "https://io1.arpcn.top",
+      "destination": "https://io.arpcn.top",
       "permanent": true
     },
     {
       "source": "/:path*",
-      "destination": "https://io1.arpcn.top/:path*",
+      "destination": "https://io.arpcn.top/:path*",
       "permanent": true
     }
   ],
@@ -23,6 +23,7 @@
     }
   ]
 }
+
 
 
 
