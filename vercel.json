@@ -7,8 +7,8 @@
       "permanent": true
     },
     {
-      "source": "/(.*)",
-      "destination": "https://io1.arpcn.top/\$1",
+      "source": "/:path*",
+      "destination": "https://io1.arpcn.top/:path*",
       "permanent": true
     }
   ],
@@ -23,6 +23,7 @@
     }
   ]
 }
+
 
 
 
