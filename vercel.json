@@ -21,9 +21,10 @@
     },
     {
       "source": "/(.*)",
-      "destination": "https://io1.arpcn.top/\$1",
+      "destination": "https://io1.arpcn.top/$1",
       "permanent": true
     }
   ]
 }
+
 
