@@ -1,0 +1,164 @@
+name: JSON Backup
+
+on:
+  schedule:
+    # 每4小时运行一次（UTC时间）
+    - cron: '0 */4 * * *'
+  workflow_dispatch:  # 允许手动触发
+  push:
+    branches: [ main ]
+
+jobs:
+  backup:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    
+    steps:
+      - name: 📥 Checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+        
+      - name: 🔧 Setup tools
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y jq curl
+          echo "✅ jq version: $(jq --version)"
+        
+      - name: 📥 Download JSON
+        run: |
+          JSON_URL="https://publish-01.obsidian.md/cache/39a393bd37490e3597370f63f89358a6"
+          JSON_FILE="mirror/abhidharma.json"
+          TEMP_FILE="temp.json"
+          
+          echo "Downloading JSON from: $JSON_URL"
+          
+          mkdir -p mirror
+          
+          # 下载文件
+          curl -s -L -o "$TEMP_FILE" "$JSON_URL"
+          
+          if [ ! -f "$TEMP_FILE" ]; then
+            echo "❌ Error: Download failed"
+            exit 1
+          fi
+          
+          FILESIZE=$(stat -f%z "$TEMP_FILE" 2>/dev/null || stat -c%s "$TEMP_FILE")
+          if [ "$FILESIZE" -eq 0 ]; then
+            echo "❌ Error: File is empty"
+            exit 1
+          fi
+          
+          echo "✅ Download successful"
+          echo "📏 File size: $FILESIZE bytes"
+        
+      - name: ✅ Validate JSON
+        run: |
+          TEMP_FILE="temp.json"
+          
+          echo "Validating JSON format..."
+          
+          if ! jq empty "$TEMP_FILE" 2>/dev/null; then
+            echo "❌ Error: Invalid JSON format"
+            echo "First 200 characters:"
+            head -c 200 "$TEMP_FILE"
+            exit 1
+          fi
+          
+          JSON_TYPE=$(jq -r 'type' "$TEMP_FILE")
+          echo "✅ JSON validation passed"
+          echo "📊 Data type: $JSON_TYPE"
+          
+          if [ "$JSON_TYPE" = "array" ]; then
+            COUNT=$(jq '. | length' "$TEMP_FILE")
+            echo "📈 Array length: $COUNT"
+          elif [ "$JSON_TYPE" = "object" ]; then
+            KEYS=$(jq '. | keys | length' "$TEMP_FILE")
+            echo "🔑 Object keys count: $KEYS"
+          fi
+        
+      - name: 🔍 Check for changes
+        run: |
+          TEMP_FILE="temp.json"
+          JSON_FILE="mirror/abhidharma.json"
+          
+          if [ -f "$JSON_FILE" ]; then
+            echo "Comparing with existing file..."
+            
+            # 比较JSON内容（忽略格式差异）
+            if jq -c . "$TEMP_FILE" | cmp -s - <(jq -c . "$JSON_FILE"); then
+              echo "📝 No changes detected"
+              echo "Skipping update..."
+              rm "$TEMP_FILE"
+              exit 0
+            else
+              echo "🔄 Changes detected"
+              
+              # 显示差异（前1000字符）
+              echo "Differences preview:"
+              jq -c . "$TEMP_FILE" | head -c 1000
+              echo ""
+            fi
+          else
+            echo "📄 First backup, creating new file"
+          fi
+        
+      - name: 💾 Save JSON file
+        run: |
+          TEMP_FILE="temp.json"
+          JSON_FILE="mirror/abhidharma.json"
+          
+          # 格式化并保存
+          jq . "$TEMP_FILE" > "$JSON_FILE"
+          
+          # 添加备份信息
+          TIMESTAMP=$(date -u +"%Y-%m-%dT%H:%M:%SZ")
+          jq --arg ts "$TIMESTAMP" \
+             --arg url "https://publish-01.obsidian.md/cache/39a393bd37490e3597370f63f89358a6" \
+             '. + {_backup_info: {last_updated: $ts, source_url: $url}}' \
+             "$JSON_FILE" > "$JSON_FILE.tmp"
+          
+          mv "$JSON_FILE.tmp" "$JSON_FILE"
+          
+          FILESIZE=$(stat -f%z "$JSON_FILE" 2>/dev/null || stat -c%s "$JSON_FILE")
+          echo "✅ JSON file saved"
+          echo "📏 File size: $FILESIZE bytes"
+          echo "⏰ Backup time: $TIMESTAMP"
+          
+          rm "$TEMP_FILE"
+        
+      - name: 🔄 Commit changes
+        run: |
+          git config --local user.email "github-actions[bot]@users.noreply.github.com"
+          git config --local user.name "github-actions[bot]"
+          
+          git add mirror/
+          
+          if git diff --staged --quiet; then
+            echo "📭 No changes to commit"
+          else
+            git commit -m "🔄 Update JSON backup $(date -u +'%Y-%m-%d %H:%M:%S UTC')"
+            git push
+            echo "✅ Changes committed"
+          fi
+        
+      - name: 📊 Backup summary
+        if: always()
+        run: |
+          echo "=== Backup Summary ==="
+          echo "Status: ${{ job.status }}"
+          echo "Time: $(date -u +'%Y-%m-%d %H:%M:%S UTC')"
+          
+          if [ -f "mirror/abhidharma.json" ]; then
+            echo "File: mirror/abhidharma.json"
+            FILESIZE=$(stat -f%z "mirror/abhidharma.json" 2>/dev/null || stat -c%s "mirror/abhidharma.json")
+            echo "Size: $FILESIZE bytes"
+            
+            # 显示备份信息
+            if jq 'has("_backup_info")' "mirror/abhidharma.json" 2>/dev/null | grep -q true; then
+              echo "Backup info:"
+              jq '._backup_info' "mirror/abhidharma.json"
+            fi
+          else
+            echo "❌ Backup file not found"
+          fi
