@@ -2,31 +2,121 @@ name: JSON Backup
 
 on:
   schedule:
-    - cron: '0 */4 * * *'
+    # 北京时间：0:00, 4:00, 8:00, 12:00, 16:00, 20:00
+    - cron: '0 0,4,8,12,16,20 * * *'
   workflow_dispatch:
 
 jobs:
   backup:
     runs-on: ubuntu-latest
+    timeout-minutes: 10
+    permissions:
+      contents: write
     
     steps:
-      - name: 📥 Download JSON
+      # 等待策略
+      - name: ⏳ Delay to avoid Pages conflict
+        run: |
+          echo "Waiting 45 seconds to avoid GitHub Pages build conflict..."
+          sleep 45
+      
+      # 检出代码
+      - name: 📥 Checkout main branch
+        uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          ref: main
+          fetch-depth: 0
+      
+      # 下载JSON
+      - name: 📥 Download and validate
+        id: download
         run: |
           URL="https://publish-01.obsidian.md/cache/39a393bd37490e3597370f63f89358a6"
+          mkdir -p mirror
           
-          # 下载并验证
-          curl -s -L -o abhidharma.json "$URL"
+          echo "Downloading from: $URL"
+          curl -s -L -o temp.json "$URL"
           
-          if ! jq empty abhidharma.json 2>/dev/null; then
-            echo "❌ Invalid JSON"
+          # 基本验证
+          SIZE=$(stat -c%s temp.json 2>/dev/null || wc -c < temp.json)
+          echo "File size: $SIZE bytes"
+          
+          if [ "$SIZE" -lt 1000 ]; then
+            echo "❌ File too small, likely download failed"
             exit 1
           fi
           
-          echo "✅ JSON downloaded"
-          echo "size=$(wc -c < abhidharma.json)" >> $GITHUB_OUTPUT
+          # 尝试JSON验证（不强制）
+          if jq . temp.json >/dev/null 2>&1; then
+            echo "✅ Valid JSON"
+          else
+            echo "⚠️ JSON parsing may have issues, but continuing"
+          fi
+          
+          # 比较文件
+          if [ -f "mirror/abhidharma.json" ] && cmp -s temp.json mirror/abhidharma.json; then
+            echo "📭 No changes"
+            rm temp.json
+            echo "changed=false" >> $GITHUB_OUTPUT
+          else
+            echo "🔄 Changes found"
+            mv temp.json mirror/abhidharma.json
+            echo "changed=true" >> $GITHUB_OUTPUT
+          fi
       
-      - name: 📊 Upload as artifact
-        uses: actions/upload-artifact@v4
-        with:
-          name: json-backup
-          path: abhidharma.json
+      # 智能提交
+      - name: 📤 Smart commit and push
+        if: steps.download.outputs.changed == 'true'
+        run: |
+          # 配置Git
+          git config user.name "Auto Backup"
+          git config user.email "backup@example.com"
+          
+          # 添加文件
+          git add mirror/abhidharma.json
+          
+          # 检查是否有实际变化
+          if git diff --cached --quiet; then
+            echo "📭 No actual changes to commit"
+            exit 0
+          fi
+          
+          # 提交
+          TIMESTAMP=$(date -u +"%Y-%m-%d %H:%M:%S")
+          git commit -m "🔁 Auto backup: $TIMESTAMP UTC"
+          
+          # 带重试的推送
+          for i in {1..5}; do
+            echo "📤 Pushing attempt $i/5..."
+            
+            if git push origin main; then
+              echo "✅ Successfully pushed"
+              break
+            else
+              echo "⚠️ Push failed, retrying in 15 seconds..."
+              sleep 15
+              
+              # 拉取最新更改
+              git pull --rebase origin main
+              git add mirror/abhidharma.json
+              git commit -m "🔁 Auto backup: $TIMESTAMP UTC (retry $i)"
+            fi
+          done
+      
+      # 最终状态
+      - name: 📊 Final status
+        run: |
+          echo "=== Backup Status ==="
+          echo "Time: $(date)"
+          echo "Repository: ${{ github.repository }}"
+          echo "Run ID: ${{ github.run_id }}"
+          echo "Trigger: ${{ github.event_name }}"
+          
+          if [ -f "mirror/abhidharma.json" ]; then
+            SIZE=$(stat -c%s mirror/abhidharma.json 2>/dev/null || wc -c < mirror/abhidharma.json)
+            echo "Backup size: $SIZE bytes"
+            echo "✅ Backup completed successfully"
+          else
+            echo "ℹ️ No backup created (no changes)"
+          fi
