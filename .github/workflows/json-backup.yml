@@ -33,7 +33,7 @@ jobs:
         id: download
         run: |
           URL="https://publish-01.obsidian.md/cache/39a393bd37490e3597370f63f89358a6"
-          mkdir -p mirror
+          mkdir -p db
           
           echo "Downloading from: $URL"
           curl -s -L -o temp.json "$URL"
@@ -55,13 +55,13 @@ jobs:
           fi
           
           # 比较文件
-          if [ -f "mirror/abhidharma.json" ] && cmp -s temp.json mirror/abhidharma.json; then
+          if [ -f "db/db.json" ] && cmp -s temp.json db/db.json; then
             echo "📭 No changes"
             rm temp.json
             echo "changed=false" >> $GITHUB_OUTPUT
           else
             echo "🔄 Changes found"
-            mv temp.json mirror/abhidharma.json
+            mv temp.json db/db.json
             echo "changed=true" >> $GITHUB_OUTPUT
           fi
       
@@ -74,7 +74,7 @@ jobs:
           git config user.email "backup@example.com"
           
           # 添加文件
-          git add mirror/abhidharma.json
+          git add db/db.json
           
           # 检查是否有实际变化
           if git diff --cached --quiet; then
@@ -99,7 +99,7 @@ jobs:
               
               # 拉取最新更改
               git pull --rebase origin main
-              git add mirror/abhidharma.json
+              git add db/db.json
               git commit -m "🔁 Auto backup: $TIMESTAMP UTC (retry $i)"
             fi
           done
@@ -113,8 +113,8 @@ jobs:
           echo "Run ID: ${{ github.run_id }}"
           echo "Trigger: ${{ github.event_name }}"
           
-          if [ -f "mirror/abhidharma.json" ]; then
-            SIZE=$(stat -c%s mirror/abhidharma.json 2>/dev/null || wc -c < mirror/abhidharma.json)
+          if [ -f "db/db.json" ]; then
+            SIZE=$(stat -c%s db/db.json 2>/dev/null || wc -c < db/db.json)
             echo "Backup size: $SIZE bytes"
             echo "✅ Backup completed successfully"
           else
