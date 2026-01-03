@@ -29,7 +29,7 @@ jobs:
       - name: 📥 Download JSON
         run: |
           URL="https://publish-01.obsidian.md/cache/39a393bd37490e3597370f63f89358a6"
-          mkdir -p mirror
+          mkdir -p db
           curl -s -L -o temp.json "$URL"
           
           # 检查下载是否成功
@@ -55,14 +55,14 @@ jobs:
       - name: 🔍 Check and update
         run: |
           # 检查文件是否存在且相同
-          if [ -f "mirror/abhidharma.json" ] && cmp -s temp.json mirror/abhidharma.json; then
+          if [ -f "db/db.json" ] && cmp -s temp.json db/db.json; then
             echo "📭 No changes detected"
             rm temp.json
             exit 0
           fi
           
           echo "🔄 Changes detected, updating file..."
-          mv temp.json mirror/abhidharma.json
+          mv temp.json db/db.json
       
       # 6. 提交更改（使用正确的配置）
       - name: 🔄 Commit changes
@@ -71,7 +71,7 @@ jobs:
           git config --global user.name "github-actions[bot]"
           git config --global user.email "github-actions[bot]@users.noreply.github.com"
           
-          git add mirror/
+          git add db/
           
           # 只有在有变化时才提交
           if ! git diff --staged --quiet; then
@@ -88,7 +88,7 @@ jobs:
         run: |
           echo "=== Backup Complete ==="
           echo "Time: $(date -u +'%Y-%m-%d %H:%M:%S UTC')"
-          echo "File: mirror/abhidharma.json"
-          if [ -f "mirror/abhidharma.json" ]; then
-            echo "Size: $(wc -c < mirror/abhidharma.json) bytes"
+          echo "File: db/db.json"
+          if [ -f "db/db.json" ]; then
+            echo "Size: $(wc -c < db/db.json) bytes"
           fi
