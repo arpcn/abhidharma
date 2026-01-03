@@ -1,0 +1,158 @@
+name: JSON Mirror Backup
+
+on:
+  schedule:
+    # 每4小时运行一次
+    - cron: '0 */4 * * *'
+  workflow_dispatch:  # 允许手动触发
+  push:
+    branches: [ main ]
+
+env:
+  JSON_URL: 'https://publish-01.obsidian.md/cache/39a393bd37490e3597370f63f89358a6'
+  MIRROR_FILE: 'mirror/abhidharma.json'
+
+jobs:
+  backup:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    
+    steps:
+      - name: 🛎️ 检出代码
+        uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          
+      - name: 📥 下载JSON文件
+        run: |
+          echo "开始下载JSON文件..."
+          
+          # 下载JSON文件
+          curl -s -L -o "temp.json" "${{ env.JSON_URL }}"
+          
+          # 验证JSON格式
+          if ! jq empty temp.json 2>/dev/null; then
+            echo "❌ 下载的文件不是有效JSON"
+            cat temp.json | head -20
+            exit 1
+          fi
+          
+          # 检查文件大小
+          FILESIZE=$(stat -f%z "temp.json" 2>/dev/null || stat -c%s "temp.json")
+          echo "✅ JSON文件大小: ${FILESIZE} 字节"
+          
+      - name: 🔍 提取信息（可选）
+        run: |
+          echo "JSON文件信息："
+          echo "================"
+          
+          # 提取基本信息
+          TOTAL_ENTRIES=$(jq '. | length' temp.json 2>/dev/null || echo "未知")
+          echo "条目数量: $TOTAL_ENTRIES"
+          
+          # 如果有timestamp字段
+          TIMESTAMP=$(jq -r '.[0].timestamp // .timestamp // "未知"' temp.json 2>/dev/null)
+          echo "时间戳: $TIMESTAMP"
+          
+          # 查看前3个条目的类型
+          echo "前3个条目类型:"
+          jq '.[0:3] | map(type)' temp.json 2>/dev/null || echo "无法解析"
+          
+      - name: 🎨 格式化JSON
+        run: |
+          # 格式化JSON（美化输出）
+          jq . temp.json > "formatted.json"
+          
+          # 检查格式化后大小
+          FORMATTED_SIZE=$(stat -f%z "formatted.json" 2>/dev/null || stat -c%s "formatted.json")
+          echo "格式化后大小: ${FORMATTED_SIZE} 字节"
+          
+      - name: 📝 创建README（可选）
+        run: |
+          # 创建JSON的简要说明
+          TIMESTAMP=$(date -u +"%Y-%m-%d %H:%M:%S UTC")
+          TOTAL_ENTRIES=$(jq '. | length' formatted.json 2>/dev/null || echo "未知")
+          
+          cat > "mirror/README.md" << EOF
+          # JSON镜像文件说明
+          
+          此目录包含自动更新的JSON镜像文件：
+          
+          - **abhidharma.json** - Obsidian Abhidharma的JSON数据镜像
+          - **abhidharma.min.json** - 压缩版本（用于生产环境）
+          - **abhidharma.pretty.json** - 格式化版本（便于阅读）
+          
+          ## 文件信息
+          - 最后更新: $TIMESTAMP
+          - 源地址: ${{ env.JSON_URL }}
+          - 总条目数: $TOTAL_ENTRIES
+          - 文件大小: $FORMATTED_SIZE 字节
+          
+          ## 更新频率
+          - 每4小时自动检查并更新
+          - 手动触发：在GitHub Actions页面点击"Run workflow"
+          
+          ## 使用示例
+          \`\`\`javascript
+          // 直接读取
+          const data = require('./mirror/abhidharma.json');
+          
+          // 或者使用fetch
+          fetch('./mirror/abhidharma.json')
+            .then(response => response.json())
+            .then(data => console.log(data));
+          \`\`\`
+          
+          ## 验证JSON
+          \`\`\`bash
+          # 验证JSON格式
+          jq empty mirror/abhidharma.json
+          
+          # 统计条目数
+          jq '. | length' mirror/abhidharma.json
+          \`\`\`
+          EOF
+          
+      - name: 💾 保存镜像文件
+        run: |
+          # 确保目录存在
+          mkdir -p mirror
+          
+          # 保存格式化版本
+          mv formatted.json "${{ env.MIRROR_FILE }}"
+          
+          # 创建压缩版本（没有多余空格）
+          jq -c . "${{ env.MIRROR_FILE }}" > "mirror/abhidharma.min.json"
+          
+          # 创建便于阅读的版本
+          cp "${{ env.MIRROR_FILE }}" "mirror/abhidharma.pretty.json"
+          
+          # 添加元数据信息
+          TIMESTAMP=$(date -u +"%Y-%m-%d %H:%M:%S UTC")
+          echo "最后更新时间: $TIMESTAMP"
+          echo "镜像文件已保存"
+          
+      - name: 🔄 提交更改
+        run: |
+          git config --local user.email "json-mirror@github.com"
+          git config --local user.name "JSON Mirror Bot"
+          
+          git add mirror/
+          
+          if git diff --staged --quiet; then
+            echo "JSON文件无变化，无需提交"
+          else
+            git commit -m "🔄 更新JSON镜像 $(date -u +'%Y-%m-%d %H:%M:%S')"
+            git push
+            echo "✅ JSON镜像已更新"
+          fi
+          
+      - name: 📊 运行统计
+        if: always()
+        run: |
+          echo "备份任务统计："
+          echo "================"
+          ls -lh mirror/
+          echo ""
+          echo "JSON验证："
+          jq -n 'input | {entries: length, first_entry: .[0]?}' mirror/abhidharma.json
