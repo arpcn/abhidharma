@@ -2,93 +2,31 @@ name: JSON Backup
 
 on:
   schedule:
-    - cron: '0 */4 * * *'  # 每4小时运行
-  workflow_dispatch:        # 允许手动触发
-  push:
-    branches: [ main ]
+    - cron: '0 */4 * * *'
+  workflow_dispatch:
 
 jobs:
   backup:
     runs-on: ubuntu-latest
-    permissions:
-      contents: write  # 关键：授予写权限
     
     steps:
-      # 1. 检出代码（使用token）
-      - name: 📥 Checkout code
-        uses: actions/checkout@v4
-        with:
-          token: ${{ secrets.GITHUB_TOKEN }}
-          fetch-depth: 0
-      
-      # 2. 安装工具
-      - name: 🔧 Setup tools
-        run: sudo apt-get update && sudo apt-get install -y jq curl
-      
-      # 3. 下载JSON
       - name: 📥 Download JSON
         run: |
           URL="https://publish-01.obsidian.md/cache/39a393bd37490e3597370f63f89358a6"
-          mkdir -p db
-          curl -s -L -o temp.json "$URL"
           
-          # 检查下载是否成功
-          if [ ! -f "temp.json" ]; then
-            echo "❌ Download failed"
-            exit 1
-          fi
-      
-      # 4. 验证JSON
-      - name: ✅ Validate JSON
-        run: |
-          if ! jq empty temp.json 2>/dev/null; then
-            echo "❌ Invalid JSON format"
-            echo "File preview:"
-            head -c 200 temp.json
+          # 下载并验证
+          curl -s -L -o abhidharma.json "$URL"
+          
+          if ! jq empty abhidharma.json 2>/dev/null; then
+            echo "❌ Invalid JSON"
             exit 1
           fi
           
-          echo "✅ Valid JSON"
-          echo "File size: $(wc -c < temp.json) bytes"
+          echo "✅ JSON downloaded"
+          echo "size=$(wc -c < abhidharma.json)" >> $GITHUB_OUTPUT
       
-      # 5. 检查变化并更新
-      - name: 🔍 Check and update
-        run: |
-          # 检查文件是否存在且相同
-          if [ -f "db/db.json" ] && cmp -s temp.json db/db.json; then
-            echo "📭 No changes detected"
-            rm temp.json
-            exit 0
-          fi
-          
-          echo "🔄 Changes detected, updating file..."
-          mv temp.json db/db.json
-      
-      # 6. 提交更改（使用正确的配置）
-      - name: 🔄 Commit changes
-        if: success()
-        run: |
-          git config --global user.name "github-actions[bot]"
-          git config --global user.email "github-actions[bot]@users.noreply.github.com"
-          
-          git add db/
-          
-          # 只有在有变化时才提交
-          if ! git diff --staged --quiet; then
-            git commit -m "🔄 Update JSON backup $(date -u +'%Y-%m-%d %H:%M:%S UTC')"
-            git push
-            echo "✅ Changes committed and pushed"
-          else
-            echo "📭 No changes to commit"
-          fi
-      
-      # 7. 完成状态
-      - name: ✅ Done
-        if: success()
-        run: |
-          echo "=== Backup Complete ==="
-          echo "Time: $(date -u +'%Y-%m-%d %H:%M:%S UTC')"
-          echo "File: db/db.json"
-          if [ -f "db/db.json" ]; then
-            echo "Size: $(wc -c < db/db.json) bytes"
-          fi
+      - name: 📊 Upload as artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: json-backup
+          path: abhidharma.json
